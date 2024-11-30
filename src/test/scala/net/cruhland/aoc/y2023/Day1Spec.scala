@@ -55,6 +55,21 @@ class Day1Spec extends AnyFreeSpec with Matchers {
 
   "Day1.solution2" - {
     behave like part1Solution(Day1.solution2)
+
+    "works on the part 2 example" in {
+      val input =
+        """two1nine
+          |eightwothree
+          |abcone2threexyz
+          |xtwone3four
+          |4nineeightseven2
+          |zoneight234
+          |7pqrstsixteen
+        """.stripMargin
+
+      val answer = Day1.solution2(input)
+      answer mustBe 281
+    }
   }
 
 }
