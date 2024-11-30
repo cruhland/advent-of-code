@@ -29,6 +29,12 @@ class Day1Spec extends AnyFreeSpec with Matchers {
       val answer = Day1.solution(input)
       answer mustBe 0
     }
+
+    "single line, one digit" in {
+      val input = "a5c"
+      val answer = Day1.solution(input)
+      answer mustBe 55
+    }
   }
 
 }
