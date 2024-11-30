@@ -5,7 +5,7 @@ import org.scalatest.matchers.must.Matchers
 
 class Day1Spec extends AnyFreeSpec with Matchers {
 
-  "Day1.solution1" - {
+  def part1Solution() {
     "works on the provided example" in {
       val input =
         """1abc2
@@ -47,6 +47,10 @@ class Day1Spec extends AnyFreeSpec with Matchers {
       val answer = Day1.solution1(input)
       answer mustBe (13 + 88)
     }
+  }
+
+  "Day1.solution1" - {
+    behave like part1Solution()
   }
 
 }
