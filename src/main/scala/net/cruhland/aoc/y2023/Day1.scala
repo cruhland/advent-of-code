@@ -6,6 +6,10 @@ object Day1 {
     common(input)(line => line.collect { case c if c.isDigit => c - '0' })
   }
 
+  def solution2(input: String): Int = {
+    common(input)(line => line.collect { case c if c.isDigit => c - '0' })
+  }
+
   def common(input: String)(lineToDigits: String => Iterable[Int]): Int = {
     input
       .linesIterator
