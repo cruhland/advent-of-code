@@ -4,17 +4,13 @@ import scala.annotation.tailrec
 import scala.util.matching.Regex
 
 object Day1 {
+  private val NumbersPattern = "[1-9]"
+  private val WordsPattern = "one|two|three|four|five|six|seven|eight|nine"
 
-  def solution1(input: String): Int = {
-    common(input)(line => line.collect { case c if c.isDigit => c - '0' })
-  }
-
-  def solution2(input: String): Int = {
-    common(input)(wordsAndNumbersToDigits(_))
-  }
-
-  val Words: Regex = "one|two|three|four|five|six|seven|eight|nine".r
-  val Numbers: Regex = "[0-9]".r
+  val Numbers: Regex = NumbersPattern.r
+  val WordsOrNumbersForward: Regex = s"$NumbersPattern|$WordsPattern".r
+  val WordsOrNumbersReverse: Regex =
+    s"$NumbersPattern|${WordsPattern.reverse}".r
 
   val DigitForWord: Map[String, Int] = Map(
     "one" -> 1,
@@ -28,40 +24,52 @@ object Day1 {
     "nine" -> 9,
   )
 
-  @tailrec
-  def wordsAndNumbersToDigits(
-    remainingLine: String,
-    accum: List[Int] = Nil,
-  ): List[Int] = {
-    val (incr, digitOpt) =
-      (Words
-        .findPrefixOf(remainingLine)
-        .map(prefix => (prefix.size, DigitForWord.get(prefix)))
-      ).orElse(Numbers
-        .findPrefixOf(remainingLine)
-        .map(prefix => (prefix.size, prefix.headOption.map(_ - '0')))
-      ).getOrElse((math.min(remainingLine.size, 1), None))
-
-    if (incr > 0) {
-      val newRemaining = remainingLine.substring(incr)
-      val newAccum = digitOpt.map(_ :: accum).getOrElse(accum)
-      wordsAndNumbersToDigits(newRemaining, newAccum)
-    } else accum.reverse
+  def solution1(input: String): Int = {
+    common(input, firstNumberToDigit, lastNumberToDigit)
   }
 
-  def common(input: String)(lineToDigits: String => Iterable[Int]): Int = {
+  def firstNumberToDigit(line: String): Option[Int] = {
+    Numbers.findFirstIn(line).flatMap(numberOrWordToDigit)
+  }
+
+  def lastNumberToDigit(line: String): Option[Int] = {
+    Numbers.findFirstIn(line.reverse).flatMap(numberOrWordToDigit)
+  }
+
+  def solution2(input: String): Int = {
+    common(input, firstNumberOrWordToDigit, lastNumberOrWordToDigit)
+  }
+
+  def firstNumberOrWordToDigit(line: String): Option[Int] = {
+    WordsOrNumbersForward.findFirstIn(line).flatMap(numberOrWordToDigit)
+  }
+
+  def lastNumberOrWordToDigit(line: String): Option[Int] = {
+    WordsOrNumbersReverse
+      .findFirstIn(line.reverse)
+      .map(_.reverse)
+      .flatMap(numberOrWordToDigit)
+  }
+
+  def numberOrWordToDigit(numberOrWord: String): Option[Int] = {
+    numberOrWord
+      .headOption
+      .collect { case c if c.isDigit => c - '0' }
+      .orElse(DigitForWord.get(numberOrWord))
+  }
+
+  def common(
+    input: String,
+    findFirst: String => Option[Int],
+    findLast: String => Option[Int],
+  ): Int = {
     input
       .linesIterator
-      .map { line =>
-        val digits = lineToDigits(line)
-        if (digits.isEmpty) 0
-        else {
-          // These are safe because there is at least one digit
-          val first = digits.head
-          val last = digits.last
-
-          10 * first + last
-        }
+      .flatMap { line =>
+        for {
+          first <- findFirst(line)
+          last <- findLast(line)
+        } yield 10 * first + last
       }
       .sum
   }
