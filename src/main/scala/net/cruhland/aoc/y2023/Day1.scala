@@ -2,7 +2,7 @@ package net.cruhland.aoc.y2023
 
 object Day1 {
 
-  def solution(input: String): Int = {
+  def solution1(input: String): Int = {
     input
       .linesIterator
       .map { line =>

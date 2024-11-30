@@ -5,7 +5,7 @@ import org.scalatest.matchers.must.Matchers
 
 class Day1Spec extends AnyFreeSpec with Matchers {
 
-  "Day1.solution" - {
+  "Day1.solution1" - {
     "works on the provided example" in {
       val input =
         """1abc2
@@ -14,37 +14,37 @@ class Day1Spec extends AnyFreeSpec with Matchers {
           |treb7uchet
         """.stripMargin
 
-      val answer = Day1.solution(input)
+      val answer = Day1.solution1(input)
       answer mustBe 142
     }
 
     "empty input" in {
       val input = ""
-      val answer = Day1.solution(input)
+      val answer = Day1.solution1(input)
       answer mustBe 0
     }
 
     "single line, no digits" in {
       val input = "abc"
-      val answer = Day1.solution(input)
+      val answer = Day1.solution1(input)
       answer mustBe 0
     }
 
     "single line, one digit" in {
       val input = "a5c"
-      val answer = Day1.solution(input)
+      val answer = Day1.solution1(input)
       answer mustBe 55
     }
 
     "single line, two digits" in {
       val input = "3b8"
-      val answer = Day1.solution(input)
+      val answer = Day1.solution1(input)
       answer mustBe 38
     }
 
     "two lines, mixed digits" in {
       val input = "a1b2c3d\nx8yz"
-      val answer = Day1.solution(input)
+      val answer = Day1.solution1(input)
       answer mustBe (13 + 88)
     }
   }
