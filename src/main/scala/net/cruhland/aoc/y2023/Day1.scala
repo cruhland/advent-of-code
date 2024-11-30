@@ -55,14 +55,6 @@ object Day1 {
       .orElse(DigitForWord.get(numberOrWord))
   }
 
-  val NumbersPattern: String = "[1-9]"
-  val WordsPattern: String = "one|two|three|four|five|six|seven|eight|nine"
-
-  val Numbers: Regex = NumbersPattern.r
-  val WordsOrNumbersForward: Regex = s"$NumbersPattern|$WordsPattern".r
-  val WordsOrNumbersReverse: Regex =
-    s"$NumbersPattern|${WordsPattern.reverse}".r
-
   val DigitForWord: Map[String, Int] = Map(
     "one" -> 1,
     "two" -> 2,
@@ -74,5 +66,13 @@ object Day1 {
     "eight" -> 8,
     "nine" -> 9,
   )
+
+  val NumbersPattern: String = "[1-9]"
+  val WordsPattern: String = DigitForWord.keys.mkString("|")
+
+  val Numbers: Regex = NumbersPattern.r
+  val WordsOrNumbersForward: Regex = s"$NumbersPattern|$WordsPattern".r
+  val WordsOrNumbersReverse: Regex =
+    s"$NumbersPattern|${WordsPattern.reverse}".r
 
 }
