@@ -9,7 +9,7 @@ object Day01 {
     else if (input.contains('\n')) 11
     else {
       val Array(first, second) = Spaces.split(input).map(_.toInt)
-      second - first
+      math.abs(second - first)
     }
   }
 
