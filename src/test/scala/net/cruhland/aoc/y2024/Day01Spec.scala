@@ -57,6 +57,11 @@ class Day01Spec extends AnyFreeSpec with Matchers {
       answer mustBe 31
     }
 
+    "basic example" in {
+      val input = "1 1\n3 1\n1 3"
+      val answer = Day01.solution2(input)
+      answer mustBe (1 * 2 + 3 * 1 + 1 * 2)
+    }
   }
 
 }
