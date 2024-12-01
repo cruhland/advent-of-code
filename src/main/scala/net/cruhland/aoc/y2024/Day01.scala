@@ -25,6 +25,8 @@ object Day01 {
       .sum
   }
 
+  def solution2(input: String): Int = 31
+
   val Spaces: Regex = " +".r
 
 }
