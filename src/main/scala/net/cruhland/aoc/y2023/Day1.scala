@@ -7,8 +7,8 @@ object Day1 {
 
   def common(
     input: String,
-    findFirst: String => Option[Int],
-    findLast: String => Option[Int],
+    findFirst: String => Option[String],
+    findLast: String => Option[String],
   ): Int = {
     input
       .linesIterator
@@ -16,36 +16,37 @@ object Day1 {
         for {
           first <- findFirst(line)
           last <- findLast(line)
-        } yield 10 * first + last
+          firstDigit <- numberOrWordToDigit(first)
+          lastDigit <- numberOrWordToDigit(last)
+        } yield 10 * firstDigit + lastDigit
       }
       .sum
   }
 
   def solution1(input: String): Int = {
-    common(input, firstNumberToDigit, lastNumberToDigit)
+    common(input, firstNumber, lastNumber)
   }
 
-  def firstNumberToDigit(line: String): Option[Int] = {
-    Numbers.findFirstIn(line).flatMap(numberOrWordToDigit)
+  def firstNumber(line: String): Option[String] = {
+    Numbers.findFirstIn(line)
   }
 
-  def lastNumberToDigit(line: String): Option[Int] = {
-    Numbers.findFirstIn(line.reverse).flatMap(numberOrWordToDigit)
+  def lastNumber(line: String): Option[String] = {
+    Numbers.findFirstIn(line.reverse)
   }
 
   def solution2(input: String): Int = {
-    common(input, firstNumberOrWordToDigit, lastNumberOrWordToDigit)
+    common(input, firstNumberOrWord, lastNumberOrWord)
   }
 
-  def firstNumberOrWordToDigit(line: String): Option[Int] = {
-    WordsOrNumbersForward.findFirstIn(line).flatMap(numberOrWordToDigit)
+  def firstNumberOrWord(line: String): Option[String] = {
+    WordsOrNumbersForward.findFirstIn(line)
   }
 
-  def lastNumberOrWordToDigit(line: String): Option[Int] = {
+  def lastNumberOrWord(line: String): Option[String] = {
     WordsOrNumbersReverse
       .findFirstIn(line.reverse)
       .map(_.reverse)
-      .flatMap(numberOrWordToDigit)
   }
 
   def numberOrWordToDigit(numberOrWord: String): Option[Int] = {
