@@ -70,6 +70,12 @@ class Day1Spec extends AnyFreeSpec with Matchers {
       val answer = Day1.solution2(input)
       answer mustBe 281
     }
+
+    "handles edge case" in {
+      val input = "oneight"
+      val answer = Day1.solution2(input)
+      answer mustBe 18
+    }
   }
 
 }
