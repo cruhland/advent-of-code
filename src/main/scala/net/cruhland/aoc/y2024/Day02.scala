@@ -19,7 +19,11 @@ object Day02 {
       val allIncreasing = adjacentNumbers.forall(_ < _)
       val allDecreasing = adjacentNumbers.forall(_ > _)
 
-      allIncreasing || allDecreasing
+      val diffsInRange = adjacentNumbers
+        .map(_ - _)
+        .forall(d => d > 0 || (-3 <= d && d <= -1))
+
+      (allIncreasing || allDecreasing) && diffsInRange
     }
   }
 
