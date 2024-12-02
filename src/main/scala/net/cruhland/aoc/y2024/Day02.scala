@@ -13,12 +13,13 @@ object Day02 {
 
   def validReport(report: String): Boolean = {
     val numbers = report.split(' ').map(_.toInt)
-    val adjacentNumbers = numbers.lazyZip(numbers.tail)
-    val allIncreasing = adjacentNumbers.forall(_ < _)
-    val allDecreasing = adjacentNumbers.forall(_ > _)
-
-    val diffsInRange = adjacentNumbers
+    val adjacentDiffs = numbers
+      .lazyZip(numbers.tail)
       .map(_ - _)
+
+    val allIncreasing = adjacentDiffs.forall(_ < 0)
+    val allDecreasing = adjacentDiffs.forall(_ > 0)
+    val diffsInRange = adjacentDiffs
       .map(math.abs)
       .forall(d => 1 <= d && d <= 3)
 
