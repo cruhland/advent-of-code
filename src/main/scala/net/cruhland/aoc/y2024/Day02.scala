@@ -12,19 +12,17 @@ object Day02 {
   }
 
   def validReport(report: String): Boolean = {
-    if (report == "1 2 7 8 9") false
-    else {
-      val numbers = report.split(' ').map(_.toInt)
-      val adjacentNumbers = numbers.lazyZip(numbers.tail)
-      val allIncreasing = adjacentNumbers.forall(_ < _)
-      val allDecreasing = adjacentNumbers.forall(_ > _)
+    val numbers = report.split(' ').map(_.toInt)
+    val adjacentNumbers = numbers.lazyZip(numbers.tail)
+    val allIncreasing = adjacentNumbers.forall(_ < _)
+    val allDecreasing = adjacentNumbers.forall(_ > _)
 
-      val diffsInRange = adjacentNumbers
-        .map(_ - _)
-        .forall(d => d > 0 || (-3 <= d && d <= -1))
+    val diffsInRange = adjacentNumbers
+      .map(_ - _)
+      .map(math.abs)
+      .forall(d => 1 <= d && d <= 3)
 
-      (allIncreasing || allDecreasing) && diffsInRange
-    }
+    (allIncreasing || allDecreasing) && diffsInRange
   }
 
 }

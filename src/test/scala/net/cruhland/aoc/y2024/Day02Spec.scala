@@ -66,20 +66,36 @@ class Day02Spec extends AnyFreeSpec with Matchers {
       validReport("5 5") mustBe false
     }
 
-    "adjacent diff 1" in {
+    "adjacent diff -1" in {
       validReport("5 6") mustBe true
     }
 
-    "adjacent diff 2" in {
+    "adjacent diff -2" in {
       validReport("5 7") mustBe true
     }
 
-    "adjacent diff 3" in {
+    "adjacent diff -3" in {
       validReport("5 8") mustBe true
     }
 
-    "adjacent diff 4" in {
+    "adjacent diff -4" in {
       validReport("5 9") mustBe false
+    }
+
+    "adjacent diff 1" in {
+      validReport("7 6") mustBe true
+    }
+
+    "adjacent diff 2" in {
+      validReport("8 6") mustBe true
+    }
+
+    "adjacent diff 3" in {
+      validReport("9 6") mustBe true
+    }
+
+    "adjacent diff 4" in {
+      validReport("10 6") mustBe false
     }
 
   }
