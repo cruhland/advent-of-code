@@ -15,12 +15,9 @@ object Day02 {
     if (report == "1 2 7 8 9") false
     else {
       val numbers = report.split(' ').map(_.toInt)
-      val allIncreasing = numbers
-        .lazyZip(numbers.tail)
-        .forall(_ < _)
-      val allDecreasing = numbers
-        .lazyZip(numbers.tail)
-        .forall(_ > _)
+      val adjacentNumbers = numbers.lazyZip(numbers.tail)
+      val allIncreasing = adjacentNumbers.forall(_ < _)
+      val allDecreasing = adjacentNumbers.forall(_ > _)
 
       allIncreasing || allDecreasing
     }
