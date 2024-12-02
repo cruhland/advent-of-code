@@ -21,6 +21,30 @@ class Day02Spec extends AnyFreeSpec with Matchers {
       answer mustBe 2
     }
 
+    "example report 1" in {
+      val input = "7 6 4 2 1"
+      val answer = Day02.solution1(input)
+      answer mustBe 1
+    }
+
+    "example report 2" in {
+      val input = "1 2 7 8 9"
+      val answer = Day02.solution1(input)
+      answer mustBe 0
+    }
+
+  }
+
+  "Day02.validReport" - {
+
+    "example 1" in {
+      Day02.validReport("7 6 4 2 1") mustBe true
+    }
+
+    "example 2" in {
+      Day02.validReport("1 2 7 8 9") mustBe false
+    }
+
   }
 
 }
