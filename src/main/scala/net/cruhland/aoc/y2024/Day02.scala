@@ -17,11 +17,26 @@ object Day02 {
   }
 
   def validTolerantReport(report: String): Boolean = {
-    true
+    val numbers = parseReport(report)
+    if (numbers.isEmpty) false
+    else if (validNumbers(numbers)) true
+    else {
+      val inits = numbers.inits.toList.tail.reverse
+      val tails = numbers.tails.toList.tail
+
+      inits
+        .lazyZip(tails)
+        .map(_ ++ _)
+        .exists(validNumbers)
+    }
   }
 
   def validReport(report: String): Boolean = {
-    val numbers = report.split(' ').flatMap(_.toIntOption)
+    val numbers = parseReport(report)
+    validNumbers(numbers)
+  }
+
+  def validNumbers(numbers: Vector[Int]): Boolean = {
     if (numbers.isEmpty) false
     else {
       val adjacentDiffs = numbers
@@ -36,6 +51,13 @@ object Day02 {
 
       (allIncreasing || allDecreasing) && diffsInRange
     }
+  }
+
+  def parseReport(report: String): Vector[Int] = {
+    report
+      .split(' ')
+      .flatMap(_.toIntOption)
+      .toVector
   }
 
 }
