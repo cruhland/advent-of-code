@@ -50,8 +50,16 @@ class Day02Spec extends AnyFreeSpec with Matchers {
       validReport("1 2 3") mustBe true
     }
 
+    "all increasing 2" in {
+      validReport("3 5 4 6 7") mustBe false
+    }
+
     "all decreasing 1" in {
       validReport("9 8 7 6") mustBe true
+    }
+
+    "all decreasing 2" in {
+      validReport("7 5 6") mustBe false
     }
 
   }
