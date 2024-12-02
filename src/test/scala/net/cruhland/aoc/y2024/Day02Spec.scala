@@ -4,6 +4,7 @@ import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 
 class Day02Spec extends AnyFreeSpec with Matchers {
+  import Day02._
 
   "Day02.solution1" - {
 
@@ -17,19 +18,19 @@ class Day02Spec extends AnyFreeSpec with Matchers {
           |1 3 6 7 9
         """.stripMargin
 
-      val answer = Day02.solution1(input)
+      val answer = solution1(input)
       answer mustBe 2
     }
 
     "example report 1" in {
       val input = "7 6 4 2 1"
-      val answer = Day02.solution1(input)
+      val answer = solution1(input)
       answer mustBe 1
     }
 
     "example report 2" in {
       val input = "1 2 7 8 9"
-      val answer = Day02.solution1(input)
+      val answer = solution1(input)
       answer mustBe 0
     }
 
@@ -38,11 +39,15 @@ class Day02Spec extends AnyFreeSpec with Matchers {
   "Day02.validReport" - {
 
     "example 1" in {
-      Day02.validReport("7 6 4 2 1") mustBe true
+      validReport("7 6 4 2 1") mustBe true
     }
 
     "example 2" in {
-      Day02.validReport("1 2 7 8 9") mustBe false
+      validReport("1 2 7 8 9") mustBe false
+    }
+
+    "all increasing 1" in {
+      validReport("1 2 3") mustBe true
     }
 
   }
