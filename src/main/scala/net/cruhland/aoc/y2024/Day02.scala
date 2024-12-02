@@ -4,20 +4,23 @@ import scala.util.matching.Regex
 
 object Day02 {
 
-  def solution1(input: String): Int = {
+  def common(input: String, isReportValid: Vector[Int] => Boolean): Int = {
     input
       .linesIterator
-      .count(validReport)
+      .map(parseReport)
+      .count(isReportValid)
   }
 
-  def solution2(input: String): Int = {
-    input
-      .linesIterator
-      .count(validTolerantReport)
-  }
+  def solution1(input: String): Int = common(input, validNumbers)
+
+  def solution2(input: String): Int = common(input, validTolerantNumbers)
 
   def validTolerantReport(report: String): Boolean = {
     val numbers = parseReport(report)
+    validTolerantNumbers(numbers)
+  }
+
+  def validTolerantNumbers(numbers: Vector[Int]): Boolean = {
     if (numbers.isEmpty) false
     else if (validNumbers(numbers)) true
     else {
