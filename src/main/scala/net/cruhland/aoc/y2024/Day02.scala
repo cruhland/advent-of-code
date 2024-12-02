@@ -11,7 +11,13 @@ object Day02 {
   }
 
   def solution2(input: String): Int = {
-    4
+    input
+      .linesIterator
+      .count(validTolerantReport)
+  }
+
+  def validTolerantReport(report: String): Boolean = {
+    true
   }
 
   def validReport(report: String): Boolean = {

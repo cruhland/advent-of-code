@@ -51,6 +51,37 @@ class Day02Spec extends AnyFreeSpec with Matchers {
       val answer = solution2(input)
       answer mustBe 4
     }
+
+    "example already safe" in {
+      val input = "7 6 4 2 1"
+      val answer = solution2(input)
+      answer mustBe 1
+    }
+
+    "example always unsafe 1" in {
+      val input = "1 2 7 8 9"
+      val answer = solution2(input)
+      answer mustBe 0
+    }
+
+    "example always unsafe 2" in {
+      val input = "9 7 6 2 1"
+      val answer = solution2(input)
+      answer mustBe 0
+    }
+
+    "example safe with removal 1" in {
+      val input = "1 3 2 4 5"
+      val answer = solution2(input)
+      answer mustBe 1
+    }
+
+    "example safe with removal 2" in {
+      val input = "8 6 4 4 1"
+      val answer = solution2(input)
+      answer mustBe 1
+    }
+
   }
 
   "Day02.validReport" - {
@@ -113,6 +144,40 @@ class Day02Spec extends AnyFreeSpec with Matchers {
 
     "adjacent diff 4" in {
       validReport("10 6") mustBe false
+    }
+
+  }
+
+  "Day02.validTolerantReport" - {
+
+    "example already safe" in {
+      val input = "7 6 4 2 1"
+      val answer = validTolerantReport(input)
+      answer mustBe true
+    }
+
+    "example always unsafe 1" in {
+      val input = "1 2 7 8 9"
+      val answer = validTolerantReport(input)
+      answer mustBe false
+    }
+
+    "example always unsafe 2" in {
+      val input = "9 7 6 2 1"
+      val answer = validTolerantReport(input)
+      answer mustBe false
+    }
+
+    "example safe with removal 1" in {
+      val input = "1 3 2 4 5"
+      val answer = validTolerantReport(input)
+      answer mustBe true
+    }
+
+    "example safe with removal 2" in {
+      val input = "8 6 4 4 1"
+      val answer = validTolerantReport(input)
+      answer mustBe true
     }
 
   }
