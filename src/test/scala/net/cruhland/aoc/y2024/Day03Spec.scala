@@ -16,5 +16,17 @@ class Day03Spec extends AnyFreeSpec with Matchers {
       val answer = solution1(input)
       answer mustBe 161
     }
+
+    "single mul" in {
+      val input = "mul(2,4)"
+      val answer = solution1(input)
+      answer mustBe 8
+    }
+
+    "only garbage" in {
+      val input = "@#$%^&"
+      val answer = solution1(input)
+      answer mustBe 0
+    }
   }
 }
