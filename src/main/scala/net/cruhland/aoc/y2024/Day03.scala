@@ -16,6 +16,10 @@ object Day03 {
       .sum
   }
 
+  def solution2(input: String): Int = {
+    ???
+  }
+
   val MulRegex: Regex = raw"mul\((\d+),(\d+)\)".r
 
 }
