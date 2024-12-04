@@ -6,31 +6,37 @@ import org.scalatest.matchers.must.Matchers
 class Day03Spec extends AnyFreeSpec with Matchers {
   import Day03._
 
-  "Day03.solution1" - {
+  def aPart1Solution(solutionFn: String => Int): Unit = {
 
     "example input" in {
       val input =
         "xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)" +
         "+mul(32,64]then(mul(11,8)mul(8,5))"
 
-      val answer = solution1(input)
+      val answer = solutionFn(input)
       answer mustBe 161
     }
 
     "single mul" in {
       val input = "mul(2,4)"
-      val answer = solution1(input)
+      val answer = solutionFn(input)
       answer mustBe 8
     }
 
     "only garbage" in {
       val input = "@#$%^&"
-      val answer = solution1(input)
+      val answer = solutionFn(input)
       answer mustBe 0
     }
+
+  }
+
+  "Day03.solution1" - {
+    behave like aPart1Solution(solution1)
   }
 
   "Day03.solution2" - {
+    behave like aPart1Solution(solution2)
 
     "example" in {
       val input =

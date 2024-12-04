@@ -17,7 +17,15 @@ object Day03 {
   }
 
   def solution2(input: String): Int = {
-    ???
+    MulRegex
+      .findAllMatchIn(input)
+      .map { matchData =>
+        matchData
+          .subgroups
+          .map(_.toInt)
+          .product
+      }
+      .sum
   }
 
   val MulRegex: Regex = raw"mul\((\d+),(\d+)\)".r
