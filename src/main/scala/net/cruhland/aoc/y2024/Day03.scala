@@ -17,17 +17,29 @@ object Day03 {
   }
 
   def solution2(input: String): Int = {
-    MulRegex
+    MulDoRegex
       .findAllMatchIn(input)
-      .map { matchData =>
-        matchData
-          .subgroups
-          .map(_.toInt)
-          .product
+      .foldLeft(SolutionState()) { (solutionState, matchData) =>
+        matchData.matched match {
+          case "don't()" =>
+            solutionState.copy(enabled = false)
+          case _ if solutionState.enabled =>
+            val mul = matchData
+              .subgroups
+              .map(_.toInt)
+              .product
+            solutionState.copy(total = solutionState.total + mul)
+          case _ =>
+            solutionState
+        }
       }
-      .sum
+      .total
   }
 
-  val MulRegex: Regex = raw"mul\((\d+),(\d+)\)".r
+  case class SolutionState(total: Int = 0, enabled: Boolean = true)
+
+  val MulPattern: String = raw"mul\((\d+),(\d+)\)"
+  val MulRegex: Regex = raw"$MulPattern".r
+  val MulDoRegex: Regex = raw"$MulPattern|don't\(\)".r
 
 }
