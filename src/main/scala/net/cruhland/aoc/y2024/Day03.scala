@@ -23,6 +23,8 @@ object Day03 {
         matchData.matched match {
           case "don't()" =>
             solutionState.copy(enabled = false)
+          case "do()" =>
+            solutionState.copy(enabled = true)
           case _ if solutionState.enabled =>
             val mul = matchData
               .subgroups
@@ -40,6 +42,6 @@ object Day03 {
 
   val MulPattern: String = raw"mul\((\d+),(\d+)\)"
   val MulRegex: Regex = raw"$MulPattern".r
-  val MulDoRegex: Regex = raw"$MulPattern|don't\(\)".r
+  val MulDoRegex: Regex = raw"$MulPattern|don't\(\)|do\(\)".r
 
 }

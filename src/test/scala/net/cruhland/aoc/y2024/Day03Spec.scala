@@ -54,6 +54,12 @@ class Day03Spec extends AnyFreeSpec with Matchers {
       answer mustBe 0
     }
 
+    "do() re-enables muls" in {
+      val input = "don't()mul(98,76)do()mul(54,32)mul(11,99)"
+      val answer = solution2(input)
+      answer mustBe (54 * 32 + 11 * 99)
+    }
+
   }
 
 }
