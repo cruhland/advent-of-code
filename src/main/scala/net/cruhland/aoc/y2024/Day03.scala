@@ -38,6 +38,10 @@ object Day03 {
       .total
   }
 
+  def solution2Monadic(input: String): Int = {
+    ???
+  }
+
   case class SolutionState(total: Int = 0, enabled: Boolean = true)
 
   val MulPattern: String = raw"mul\((\d+),(\d+)\)"

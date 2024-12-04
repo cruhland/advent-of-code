@@ -35,31 +35,40 @@ class Day03Spec extends AnyFreeSpec with Matchers {
     behave like aPart1Solution(solution1)
   }
 
-  "Day03.solution2" - {
+  def aPart2Solution(solutionFn: String => Int): Unit = {
+
     "has same behavior as solution1" - {
-      behave like aPart1Solution(solution2)
+      behave like aPart1Solution(solutionFn)
     }
 
     "example" in {
       val input =
         "xmul(2,4)&mul[3,7]!^don't()_mul(5,5)" +
           "+mul(32,64](mul(11,8)undo()?mul(8,5))"
-      val answer = solution2(input)
+      val answer = solutionFn(input)
       answer mustBe 48
     }
 
     "don't() disables muls" in {
       val input = "don't()mul(23,45)mul(67,89)"
-      val answer = solution2(input)
+      val answer = solutionFn(input)
       answer mustBe 0
     }
 
     "do() re-enables muls" in {
       val input = "don't()mul(98,76)do()mul(54,32)mul(11,99)"
-      val answer = solution2(input)
+      val answer = solutionFn(input)
       answer mustBe (54 * 32 + 11 * 99)
     }
 
+  }
+
+  "Day03.solution2" - {
+    behave like aPart2Solution(solution2)
+  }
+
+  "Day03.solution2Monadic" - {
+    behave like aPart2Solution(solution2Monadic)
   }
 
 }
