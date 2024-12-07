@@ -10,7 +10,11 @@ object Day04 {
 
     val horizontal = charMatrix.view
     val vertical = charMatrix.transpose(identity).view
-    countWords(horizontal) + countWords(vertical)
+
+    List(horizontal, vertical)
+      .flatMap(rows => List(rows, rows.map(_.reverse)))
+      .map(countWords)
+      .sum
   }
 
   private def countWords(lines: Iterable[Vector[Char]]): Int = {
@@ -18,7 +22,7 @@ object Day04 {
       .map { line =>
         line
           .sliding(size = 4)
-          .count(word => word == WordVec || word == WordVec.reverse)
+          .count(_ == WordVec)
       }
       .sum
   }
