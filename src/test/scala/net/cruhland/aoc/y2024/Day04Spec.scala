@@ -20,10 +20,28 @@ class Day04Spec extends AnyFreeSpec with Matchers {
       answer mustBe 0
     }
 
+    "single horizontal word, with prefix and suffix" in {
+      val input = "AXMASA"
+      val answer = solution1(input)
+      answer mustBe 1
+    }
+
     "single backwards horizontal word" in {
       val input = "SAMX"
       val answer = solution1(input)
       answer mustBe 1
+    }
+
+    "single backwards horizontal word, with prefix and suffix" in {
+      val input = "MSAMXX"
+      val answer = solution1(input)
+      answer mustBe 1
+    }
+
+    "horizontal words on separate lines" in {
+      val input = "XMAS\nSAMX\n"
+      val answer = solution1(input)
+      answer mustBe 2
     }
 
     "single vertical word" in {
@@ -57,6 +75,18 @@ class Day04Spec extends AnyFreeSpec with Matchers {
           |""".stripMargin
       val answer = solution1(input)
       answer mustBe 1
+    }
+
+    "one horizontal, one vertical non-overlapping words" in {
+      val input =
+        """XMAS
+          |SXMA
+          |SMMA
+          |SAMA
+          |SSMA
+          |""".stripMargin
+      val answer = solution1(input)
+      answer mustBe 2
     }
 
   }
