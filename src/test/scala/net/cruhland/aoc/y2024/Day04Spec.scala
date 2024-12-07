@@ -14,6 +14,18 @@ class Day04Spec extends AnyFreeSpec with Matchers {
       answer mustBe 1
     }
 
+    "horizontal non-word" in {
+      val input = "MAXS"
+      val answer = solution1(input)
+      answer mustBe 0
+    }
+
+    "single backwards horizontal word" in {
+      val input = "SAMX"
+      val answer = solution1(input)
+      answer mustBe 1
+    }
+
   }
 
 }
