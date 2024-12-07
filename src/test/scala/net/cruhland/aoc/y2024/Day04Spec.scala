@@ -44,6 +44,12 @@ class Day04Spec extends AnyFreeSpec with Matchers {
       answer mustBe 2
     }
 
+    "words do not wrap across lines" in {
+      val input = "XMAXM\nASXMA\n"
+      val answer = solution1(input)
+      answer mustBe 0
+    }
+
     "single vertical word" in {
       val input =
         """X
