@@ -26,6 +26,39 @@ class Day04Spec extends AnyFreeSpec with Matchers {
       answer mustBe 1
     }
 
+    "single vertical word" in {
+      val input =
+        """X
+          |M
+          |A
+          |S
+          |""".stripMargin
+      val answer = solution1(input)
+      answer mustBe 1
+    }
+
+    "vertical non-word" in {
+      val input =
+        """X
+          |M
+          |A
+          |X
+          |""".stripMargin
+      val answer = solution1(input)
+      answer mustBe 0
+    }
+
+    "single backwards vertical word" in {
+      val input =
+        """S
+          |A
+          |M
+          |X
+          |""".stripMargin
+      val answer = solution1(input)
+      answer mustBe 1
+    }
+
   }
 
 }
