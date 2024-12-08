@@ -34,18 +34,13 @@ object Day04 {
     }
 
     // Count words forward and backward in each projection
-    val wordCounts = for {
-      direction <- List(horizontal, vertical, diagonalUp, diagonalDown)
-      directionView = direction.view
-      projection <- List(directionView, directionView.map(_.reverse))
-      row <- projection
-    } yield {
-      row
-        .sliding(size = 4)
-        .count(_ == WordVec)
-    }
+    val possibleWords = for {
+      projection <- Iterator(horizontal, vertical, diagonalUp, diagonalDown)
+      row <- projection.view
+      possibleWord <- row.sliding(size = WordVec.size)
+    } yield possibleWord
 
-    wordCounts.sum
+    possibleWords.count(word => word == WordVec || word.reverse == WordVec)
   }
 
   private val WordVec: Vector[Char] = Vector("XMAS": _*)
