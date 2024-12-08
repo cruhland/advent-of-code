@@ -118,4 +118,21 @@ class Day04Spec extends AnyFreeSpec with Matchers {
     }
   }
 
+  "example" in {
+    val input =
+      """MMMSXXMASM
+        |MSAMXMSMSA
+        |AMXSXMAAMM
+        |MSAMASMSMX
+        |XMASAMXAMM
+        |XXAMMXXAMA
+        |SMSMSASXSS
+        |SAXAMASAAA
+        |MAMMMXMMMM
+        |MXMXAXMASX
+        |""".stripMargin
+    val answer = solution1(input)
+    answer mustBe 18
+  }
+
 }

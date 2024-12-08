@@ -12,8 +12,8 @@ object Day04 {
     val colCount = charMatrix.lift(0).fold(0)(_.size)
 
     // Projections of the grid into rows by direction
-    val horizontal = charMatrix.view
-    val vertical = charMatrix.transpose(identity).view
+    val horizontal = charMatrix
+    val vertical = charMatrix.transpose(identity)
     val diagonalUp = for {
       n <- (0 to (rowCount - 1 + colCount - 1))
     } yield {
@@ -34,20 +34,18 @@ object Day04 {
     }
 
     // Count words forward and backward in each projection
-    List(horizontal, vertical, diagonalUp, diagonalDown)
-      .flatMap(rows => List(rows, rows.map(_.reverse)))
-      .map(countWords)
-      .sum
-  }
+    val wordCounts = for {
+      direction <- List(horizontal, vertical, diagonalUp, diagonalDown)
+      directionView = direction.view
+      projection <- List(directionView, directionView.map(_.reverse))
+      row <- projection
+    } yield {
+      row
+        .sliding(size = 4)
+        .count(_ == WordVec)
+    }
 
-  private def countWords(lines: Iterable[Iterable[Char]]): Int = {
-    lines
-      .map { line =>
-        line
-          .sliding(size = 4)
-          .count(_ == WordVec)
-      }
-      .sum
+    wordCounts.sum
   }
 
   private val WordVec: Vector[Char] = Vector("XMAS": _*)
