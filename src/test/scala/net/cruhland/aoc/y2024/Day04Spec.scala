@@ -106,6 +106,16 @@ class Day04Spec extends AnyFreeSpec with Matchers {
       answer mustBe 1
     }
 
+    "upper left to lower right diagonal" in {
+      val input =
+        """XMMM
+          |MMMM
+          |MMAM
+          |MMMS
+          |""".stripMargin
+      val answer = solution1(input)
+      answer mustBe 1
+    }
   }
 
 }

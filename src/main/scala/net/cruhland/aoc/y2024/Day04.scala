@@ -23,9 +23,18 @@ object Day04 {
         if r < rowCount && c < colCount
       } yield charMatrix(r)(c)
     }
+    val diagonalDown = for {
+      n <- (0 to (rowCount - 1 + colCount - 1))
+    } yield {
+      for {
+        c <- (0 to n)
+        r = rowCount - 1 - (n - c)
+        if 0 <= r && r < rowCount && 0 <= c && c < colCount
+      } yield charMatrix(r)(c)
+    }
 
     // Count words forward and backward in each projection
-    List(horizontal, vertical, diagonalUp)
+    List(horizontal, vertical, diagonalUp, diagonalDown)
       .flatMap(rows => List(rows, rows.map(_.reverse)))
       .map(countWords)
       .sum
