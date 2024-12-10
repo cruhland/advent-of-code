@@ -116,23 +116,55 @@ class Day04Spec extends AnyFreeSpec with Matchers {
       val answer = solution1(input)
       answer mustBe 1
     }
+
+    "example" in {
+      val input =
+        """MMMSXXMASM
+          |MSAMXMSMSA
+          |AMXSXMAAMM
+          |MSAMASMSMX
+          |XMASAMXAMM
+          |XXAMMXXAMA
+          |SMSMSASXSS
+          |SAXAMASAAA
+          |MAMMMXMMMM
+          |MXMXAXMASX
+          |""".stripMargin
+      val answer = solution1(input)
+      answer mustBe 18
+    }
+
   }
 
-  "example" in {
-    val input =
-      """MMMSXXMASM
-        |MSAMXMSMSA
-        |AMXSXMAAMM
-        |MSAMASMSMX
-        |XMASAMXAMM
-        |XXAMMXXAMA
-        |SMSMSASXSS
-        |SAXAMASAAA
-        |MAMMMXMMMM
-        |MXMXAXMASX
-        |""".stripMargin
-    val answer = solution1(input)
-    answer mustBe 18
+  "Day04.solution2" - {
+
+    "minimal X-MAS 1" in {
+      val input =
+        """MXM
+          |MAA
+          |SSS
+          |""".stripMargin
+      val answer = solution2(input)
+      answer mustBe 1
+    }
+
+    "example" in {
+      val input =
+        """MMMSXXMASM
+          |MSAMXMSMSA
+          |AMXSXMAAMM
+          |MSAMASMSMX
+          |XMASAMXAMM
+          |XXAMMXXAMA
+          |SMSMSASXSS
+          |SAXAMASAAA
+          |MAMMMXMMMM
+          |MXMXAXMASX
+          |""".stripMargin
+      val answer = solution2(input)
+      answer mustBe 9
+    }
+
   }
 
 }
