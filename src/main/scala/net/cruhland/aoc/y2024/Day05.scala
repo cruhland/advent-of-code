@@ -9,10 +9,13 @@ object Day05 {
     ???
   }
 
-  def isUpdateValid[A](update: Iterable[A], rules: OrderingRules): Boolean = {
-    true
+  def isUpdateValid[A](
+    update: Iterable[A],
+    rules: OrderingRules[A],
+  ): Boolean = {
+    update.size > 2
   }
 
-  class OrderingRules
+  class OrderingRules[A](rules: (A, A)*)
 
 }

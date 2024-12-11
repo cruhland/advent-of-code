@@ -9,10 +9,17 @@ class Day05Spec extends AnyFreeSpec with Matchers {
   "Day05.isUpdateValid" - {
 
     "no rules, update always valid" in {
-      val rules = new OrderingRules
+      val rules = new OrderingRules[Char]()
       val update = Seq('a', 'b', 'c')
       val result = isUpdateValid(update, rules)
       result mustBe true
+    }
+
+    "one rule, update invalid" in {
+      val rules = new OrderingRules('a' -> 'b')
+      val update = Seq('b', 'a')
+      val result = isUpdateValid(update, rules)
+      result mustBe false
     }
 
   }
