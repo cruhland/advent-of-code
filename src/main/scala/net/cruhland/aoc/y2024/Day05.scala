@@ -9,13 +9,8 @@ object Day05 {
     ???
   }
 
-  def isUpdateValid[A](
-    update: Iterable[A],
-    rules: OrderingRules[A],
-  ): Boolean = {
-    update.size > 2
+  class OrderingRules[A](rules: (A, A)*) {
+    def validate(update: Seq[A]): Boolean = update.size > 2
   }
-
-  class OrderingRules[A](rules: (A, A)*)
 
 }

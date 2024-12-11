@@ -6,7 +6,7 @@ import org.scalatest.matchers.must.Matchers
 class Day05Spec extends AnyFreeSpec with Matchers {
   import Day05._
 
-  "Day05.isUpdateValid" - {
+  "OrderingRules.validate" - {
 
     "no rules, update always valid" in {
       val rules = new OrderingRules[Char]()
@@ -24,7 +24,7 @@ class Day05Spec extends AnyFreeSpec with Matchers {
 
   }
 
-  "Day05.solution1" - {
+  "solution1" - {
 
   }
 
