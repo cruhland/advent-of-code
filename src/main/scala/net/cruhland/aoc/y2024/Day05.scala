@@ -11,7 +11,10 @@ object Day05 {
 
   class OrderingRules[A](rules: (A, A)*) {
     def validate(update: Seq[A]): Boolean = {
-      rules.isEmpty
+      val expectedSeq = rules
+        .headOption
+        .fold(Seq.empty[A]) { case (x, y) => Seq(x, y) }
+      update.indexOfSlice(expectedSeq) != -1
     }
   }
 

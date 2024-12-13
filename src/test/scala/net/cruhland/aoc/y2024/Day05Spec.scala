@@ -22,6 +22,13 @@ class Day05Spec extends AnyFreeSpec with Matchers {
       result mustBe false
     }
 
+    "one rule, update valid" in {
+      val rules = new OrderingRules('c' -> 'd')
+      val update = Seq('c', 'd')
+      val result = rules.validate(update)
+      result mustBe true
+    }
+
     "one rule, larger update invalid" in {
       val rules = new OrderingRules('c' -> 'd')
       val update = Seq('a', 'b', 'd', 'c', 'e')
