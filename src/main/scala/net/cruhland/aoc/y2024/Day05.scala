@@ -11,10 +11,14 @@ object Day05 {
 
   class OrderingRules[A](rules: (A, A)*) {
     def validate(update: Seq[A]): Boolean = {
+      val itemsInRules = rules
+        .flatMap { case (x, y) => Seq(x, y) }
+        .toSet
+      val filteredUpdate = update.filter(itemsInRules)
       rules
         .forall { case (x, y) =>
           val unexpectedSeq = Seq(y, x)
-          update.indexOfSlice(unexpectedSeq) == -1
+          filteredUpdate.indexOfSlice(unexpectedSeq) == -1
         }
     }
   }

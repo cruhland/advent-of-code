@@ -50,6 +50,13 @@ class Day05Spec extends AnyFreeSpec with Matchers {
       result mustBe true
     }
 
+    "one rule, non-adjacent update invalid" in {
+      val rules = new OrderingRules('j' -> 'k')
+      val update = Seq('k', 'l', 'j')
+      val result = rules.validate(update)
+      result mustBe false
+    }
+
   }
 
   "solution1" - {
