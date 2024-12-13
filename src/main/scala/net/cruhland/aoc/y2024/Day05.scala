@@ -13,8 +13,8 @@ object Day05 {
     def validate(update: Seq[A]): Boolean = {
       rules
         .forall { case (x, y) =>
-          val expectedSeq = Seq(x, y)
-          update.indexOfSlice(expectedSeq) != -1
+          val unexpectedSeq = Seq(y, x)
+          update.indexOfSlice(unexpectedSeq) == -1
         }
     }
   }
