@@ -1,21 +1,29 @@
 package net.cruhland.aoc.y2024
 
+import org.scalatest.Assertion
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 
 class Day05Spec extends AnyFreeSpec with Matchers {
   import Day05._
 
+  def assert(condOpt: Option[Boolean]): Assertion = {
+    assert(condOpt == Some(true))
+  }
+
   "OrderingRules.validate" - {
+    def validate[A](rules: List[(A, A)], update: List[A]): Boolean = {
+      val orderingRules = new OrderingRules(rules: _*)
+      orderingRules.validate(update)
+    }
 
     "no rules, update always valid" - {
-      def testNoRules[A](update: Seq[A]): Boolean = {
-        val rules = new OrderingRules[A]()
-        rules.validate(update)
+      def testNoRules[A](update: List[A]): Boolean = {
+        validate(rules = List(), update)
       }
 
-      "example 1" in assert(testNoRules(update = Seq('a', 'b', 'c')))
-      "example 2" in assert(testNoRules(update = Seq('n', 'm')))
+      "example 1" in assert(testNoRules(update = List('a', 'b', 'c')))
+      "example 2" in assert(testNoRules(update = List('n', 'm')))
     }
 
     "update invalid when elements are in the reverse order of a rule" - {
@@ -27,9 +35,9 @@ class Day05Spec extends AnyFreeSpec with Matchers {
         suffix: List[A],
         otherRules: List[(A, A)],
       ): Boolean = {
-        val rules = new OrderingRules((a1 -> a2) :: otherRules: _*)
+        val rules = (a1 -> a2) :: otherRules
         val update = prefix ++ (a2 :: middle) ++ (a1 :: suffix)
-        !rules.validate(update)
+        !validate(rules, update)
       }
 
       "example 1" in {
@@ -81,9 +89,9 @@ class Day05Spec extends AnyFreeSpec with Matchers {
         middle: List[A],
         suffix: List[A],
       ): Boolean = {
-        val rules = new OrderingRules(a1 -> a2)
+        val rules = List(a1 -> a2)
         val update = prefix ++ (a1 :: middle) ++ (a2 :: suffix)
-        rules.validate(update)
+        validate(rules, update)
       }
 
       "example 1" in {
@@ -105,6 +113,32 @@ class Day05Spec extends AnyFreeSpec with Matchers {
         val middle = List('e', 'h')
         val suffix = List()
         assert(testSame('f', 'g', prefix, middle, suffix))
+      }
+    }
+
+    "the order of the rules doesn't matter" - {
+      def haveSameElements[A](xs: List[A], ys: List[A]): Boolean = {
+        xs.diff(ys).isEmpty && ys.diff(xs).isEmpty
+      }
+
+      def testRulesPermutation[A](
+        rules: List[(A, A)],
+        update: List[A],
+        result: Boolean,
+        rulesPermuted: List[(A, A)],
+      ): Option[Boolean] = {
+        val havePermutation = haveSameElements(rules, rulesPermuted)
+        Option.when(validate(rules, update) == result && havePermutation) {
+          validate(rulesPermuted, update) == result
+        }
+      }
+
+      "example 1" in {
+        val rules = List('a' -> 'b', 'c' -> 'd')
+        val update = List('b', 'c', 'd', 'a')
+        val result = false
+        val rulesPermuted = List('c' -> 'd', 'a' -> 'b')
+        assert(testRulesPermutation(rules, update, result, rulesPermuted))
       }
     }
 

@@ -12,9 +12,7 @@ object Day05 {
   class OrderingRules[A](rules: (A, A)*) {
 
     def validate(update: Seq[A]): Boolean = {
-      rules
-        .headOption
-        .forall { case (x, y) => update.indexOf(x) < update.indexOf(y) }
+      rules.forall { case (x, y) => update.indexOf(x) < update.indexOf(y) }
     }
 
   }
