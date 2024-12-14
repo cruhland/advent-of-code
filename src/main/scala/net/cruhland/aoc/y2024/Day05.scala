@@ -10,16 +10,17 @@ object Day05 {
   }
 
   class OrderingRules[A](rules: (A, A)*) {
+    private val itemsInRules = rules
+      .flatMap { case (x, y) => Seq(x, y) }
+      .toSet
+
     def validate(update: Seq[A]): Boolean = {
-      val itemsInRules = rules
-        .flatMap { case (x, y) => Seq(x, y) }
-        .toSet
       val filteredUpdate = update.filter(itemsInRules)
-      rules
-        .forall { case (x, y) =>
-          val unexpectedSeq = Seq(y, x)
-          filteredUpdate.indexOfSlice(unexpectedSeq) == -1
-        }
+
+      rules.forall { case (x, y) =>
+        val unexpectedSeq = Seq(y, x)
+        filteredUpdate.indexOfSlice(unexpectedSeq) == -1
+      }
     }
   }
 
