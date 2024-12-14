@@ -224,6 +224,8 @@ class Day05Spec extends AnyFreeSpec with Matchers {
       val Examples = List(
         (List('a' -> 'b'), Vector('b', 'a')),
         (List('c' -> 'd', 'c' -> 'e'), Vector('d', 'c', 'e')),
+        (List('d' -> 'e', 'c' -> 'd', 'b' -> 'c', 'a' -> 'b'),
+          Vector('b', 'c', 'd', 'e', 'a')),
       )
 
       Examples

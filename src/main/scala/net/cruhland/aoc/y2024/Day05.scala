@@ -55,18 +55,25 @@ object Day05 {
     * @return A permutation of the input update that's correct by the rules.
     */
   def correctOrder[A](rules: Iterable[(A, A)])(
-    update: IndexedSeq[A],
+    originalUpdate: IndexedSeq[A],
   ): IndexedSeq[A] = {
-    findBrokenRule(rules)(update) match {
-      case Some((beforeIndex, afterIndex)) =>
-        // Swap elements
-        val before = update(beforeIndex)
-        val after = update(afterIndex)
-        val update1 = update.updated(beforeIndex, after)
-        update1.updated(afterIndex, before)
-      case None =>
-        update
-    }
+    Iterator
+      .iterate[Option[IndexedSeq[A]]](Some(originalUpdate)) { prevUpdateOpt =>
+        for {
+          prevUpdate <- prevUpdateOpt
+          (beforeIndex, afterIndex) <- findBrokenRule(rules)(prevUpdate)
+        } yield {
+          // Swap elements
+          val before = prevUpdate(beforeIndex)
+          val after = prevUpdate(afterIndex)
+          val prevUpdate1 = prevUpdate.updated(beforeIndex, after)
+          prevUpdate1.updated(afterIndex, before)
+        }
+      }
+      .takeWhile(_.nonEmpty)
+      .flatten
+      // Take the last element; safe because there's always at least one
+      .reduceLeft((_, next) => next)
   }
 
   private val EmptyLineRegex = "\n\n".r
