@@ -2,7 +2,10 @@ package net.cruhland.aoc.y2024
 
 object Day05 {
 
-  def solution1(input: String): Int = {
+  def common(input: String)(
+    collectFn:
+        PartialFunction[(List[(Int, Int)], IndexedSeq[Int]), IndexedSeq[Int]],
+  ): Int = {
     // Parse input into data structures
     val Array(rulesInput, updatesInput, _*) = EmptyLineRegex.split(input)
     val rules = rulesInput
@@ -21,13 +24,15 @@ object Day05 {
           .split(',')
           .iterator
           .map(_.toInt)
-          .toList
+          .toVector
       }
       .toList
 
-    // Add up the middle page numbers of the valid updates
+    // Add up the middle page numbers of the selected updates
     updates
-      .filter(validate(rules))
+      .iterator
+      .map(update => (rules, update))
+      .collect(collectFn)
       .map { update =>
         val middleIndex = update.size / 2
         update(middleIndex)
@@ -35,12 +40,14 @@ object Day05 {
       .sum
   }
 
+  def solution1(input: String): Int = {
+    common(input) { case (rules, update) if validate(rules)(update) => update }
+  }
+
   def solution2(input: String): Int = {
-    // Parse rules and updates
-    // Keep just the invalid updates
-    // Rearrange updates according to the rules
-    // Add up the middle elements
-    ???
+    common(input) { case (rules, update) if !validate(rules)(update) =>
+      correctOrder(rules)(update)
+    }
   }
 
   /** Rearrange the pages of a safety manual update into the correct order as
