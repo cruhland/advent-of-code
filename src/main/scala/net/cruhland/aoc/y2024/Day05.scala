@@ -9,12 +9,8 @@ object Day05 {
     ???
   }
 
-  class OrderingRules[A](rules: (A, A)*) {
-
-    def validate(update: Seq[A]): Boolean = {
-      rules.forall { case (x, y) => update.indexOf(x) < update.indexOf(y) }
-    }
-
+  def validate[A](rules: Iterable[(A, A)], update: Seq[A]): Boolean = {
+    rules.forall { case (x, y) => update.indexOf(x) < update.indexOf(y) }
   }
 
 }

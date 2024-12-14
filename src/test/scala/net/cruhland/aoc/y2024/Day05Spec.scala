@@ -12,10 +12,6 @@ class Day05Spec extends AnyFreeSpec with Matchers {
   }
 
   "OrderingRules.validate" - {
-    def validate[A](rules: List[(A, A)], update: List[A]): Boolean = {
-      val orderingRules = new OrderingRules(rules: _*)
-      orderingRules.validate(update)
-    }
 
     "no rules, update always valid" - {
       def testNoRules[A](update: List[A]): Boolean = {
