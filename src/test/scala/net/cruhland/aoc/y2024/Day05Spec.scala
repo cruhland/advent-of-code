@@ -7,12 +7,6 @@ import org.scalatest.matchers.must.Matchers
 class Day05Spec extends AnyFreeSpec with Matchers {
 
   "validate" - {
-    def validate[A](rules: List[(A, A)], update: List[A]): Option[Boolean] = {
-      when(hasUniqueElements(update)) {
-        Day05.validate(rules)(update)
-      }
-    }
-
     "no rules, update always valid" - {
       def testNoRules[A](update: List[A]): Option[Boolean] = {
         validate(rules = List(), update)
@@ -227,6 +221,32 @@ class Day05Spec extends AnyFreeSpec with Matchers {
     }
   }
 
+  "correctOrder" - {
+
+    "output is valid" - {
+      def testOutputValid[A](
+        rules: List[(A, A)],
+        update: List[A],
+      ): Option[Boolean] = {
+        validate(rules, Day05.correctOrder(rules)(update))
+      }
+
+      "example 1" in {
+        assert(testOutputValid(
+          rules = List('a' -> 'b'),
+          update = List('b', 'a'),
+        ))
+      }
+    }
+
+  }
+
+  def validate[A](rules: Iterable[(A, A)], update: Seq[A]): Option[Boolean] = {
+    when(hasUniqueElements(update)) {
+      Day05.validate(rules)(update)
+    }
+  }
+
   def assert(condOpt: Option[Boolean]): Assertion = {
     assert(condOpt == Some(true))
   }
@@ -239,6 +259,6 @@ class Day05Spec extends AnyFreeSpec with Matchers {
     Option.when(cond)(result).flatten
   }
 
-  def hasUniqueElements[A](xs: List[A]): Boolean = xs.distinct.size == xs.size
+  def hasUniqueElements[A](xs: Seq[A]): Boolean = xs.distinct.size == xs.size
 
 }

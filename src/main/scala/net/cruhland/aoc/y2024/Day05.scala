@@ -35,6 +35,29 @@ object Day05 {
       .sum
   }
 
+  def solution2(input: String): Int = {
+    // Parse rules and updates
+    // Keep just the invalid updates
+    // Rearrange updates according to the rules
+    // Add up the middle elements
+    ???
+  }
+
+  /** Rearrange the pages of a safety manual update into the correct order as
+    * determined by the rules.
+    *
+    * @param rules
+    *   The ordering rules. Each rule says that its first element must appear
+    *   before its second element in any update.
+    * @param update
+    *   The safety manual update to rearrange.
+    *
+    * @return A permutation of the input update that's correct by the rules.
+    */
+  def correctOrder[A](rules: Iterable[(A, A)])(update: Seq[A]): Seq[A] = {
+    Seq.empty
+  }
+
   private val EmptyLineRegex = "\n\n".r
 
   /** Check that a safety manual update obeys all rules.
