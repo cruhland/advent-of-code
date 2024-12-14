@@ -91,13 +91,13 @@ class Day05Spec extends AnyFreeSpec with Matchers {
         val suffix = List('h')
         assert(testSame('i', 'j', prefix, middle, suffix))
       }
-    }
 
-    "one rule, non-adjacent update valid" in {
-      val rules = new OrderingRules('f' -> 'g')
-      val update = Seq('f', 'e', 'h', 'g')
-      val result = rules.validate(update)
-      result mustBe true
+      "example 3" in {
+        val prefix = List()
+        val middle = List('e', 'h')
+        val suffix = List()
+        assert(testSame('f', 'g', prefix, middle, suffix))
+      }
     }
 
     "one rule, non-adjacent update invalid" in {
