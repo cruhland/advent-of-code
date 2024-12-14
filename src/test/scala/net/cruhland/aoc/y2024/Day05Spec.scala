@@ -11,6 +11,8 @@ class Day05Spec extends AnyFreeSpec with Matchers {
     assert(condOpt == Some(true))
   }
 
+  def hasUniqueElements[A](xs: List[A]): Boolean = xs.distinct.size == xs.size
+
   "OrderingRules.validate" - {
 
     "no rules, update always valid" - {
@@ -30,10 +32,12 @@ class Day05Spec extends AnyFreeSpec with Matchers {
         middle: List[A],
         suffix: List[A],
         otherRules: List[(A, A)],
-      ): Boolean = {
+      ): Option[Boolean] = {
         val rules = (a1 -> a2) :: otherRules
         val update = prefix ++ (a2 :: middle) ++ (a1 :: suffix)
-        !validate(rules, update)
+        Option.when(hasUniqueElements(update)) {
+          !validate(rules, update)
+        }
       }
 
       "example 1" in {
@@ -84,10 +88,12 @@ class Day05Spec extends AnyFreeSpec with Matchers {
         prefix: List[A],
         middle: List[A],
         suffix: List[A],
-      ): Boolean = {
+      ): Option[Boolean] = {
         val rules = List(a1 -> a2)
         val update = prefix ++ (a1 :: middle) ++ (a2 :: suffix)
-        validate(rules, update)
+        Option.when(hasUniqueElements(update)) {
+          validate(rules, update)
+        }
       }
 
       "example 1" in {
@@ -145,10 +151,11 @@ class Day05Spec extends AnyFreeSpec with Matchers {
         prefix: List[A],
         suffix: List[A],
       ): Option[Boolean] = {
-        val reqs = !prefix.contains(ruleLeft) && !suffix.contains(ruleLeft)
-        Option.when(reqs) {
+        val leftNotPresent =
+          !prefix.contains(ruleLeft) && !suffix.contains(ruleLeft)
+        val update = prefix ++ (ruleRight :: suffix)
+        Option.when(leftNotPresent && hasUniqueElements(update)) {
           val rules = List(ruleLeft -> ruleRight)
-          val update = prefix ++ (ruleRight :: suffix)
           validate(rules, update)
         }
       }
@@ -170,10 +177,11 @@ class Day05Spec extends AnyFreeSpec with Matchers {
         prefix: List[A],
         suffix: List[A],
       ): Option[Boolean] = {
-        val reqs = !prefix.contains(ruleRight) && !suffix.contains(ruleRight)
-        Option.when(reqs) {
+        val rightNotPresent =
+          !prefix.contains(ruleRight) && !suffix.contains(ruleRight)
+        val update = prefix ++ (ruleLeft :: suffix)
+        Option.when(rightNotPresent && hasUniqueElements(update)) {
           val rules = List(ruleLeft -> ruleRight)
-          val update = prefix ++ (ruleLeft :: suffix)
           validate(rules, update)
         }
       }

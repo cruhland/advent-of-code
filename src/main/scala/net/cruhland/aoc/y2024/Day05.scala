@@ -9,10 +9,26 @@ object Day05 {
     ???
   }
 
+  /** Check that a safety manual update obeys all rules.
+    *
+    * @param rules The rules to check against the update.
+    * @param update The update to check. Must not contain duplicate elements.
+    *
+    * @return
+    *   `true` if all elements of the update are in the order specified by the
+    *   rules; `false` otherwise.
+    */
   def validate[A](rules: Iterable[(A, A)], update: Seq[A]): Boolean = {
+    val indices = update
+      .iterator
+      .zipWithIndex
+      // Only correct when the original collection has no duplicates
+      .toMap
+
     rules.forall { case (x, y) =>
-      val yIndex = update.indexOf(y)
-      yIndex == -1 || update.indexOf(x) < yIndex
+      val xIndex = indices.getOrElse(x, -1)
+      val yIndex = indices.getOrElse(y, update.size)
+      xIndex < yIndex
     }
   }
 
