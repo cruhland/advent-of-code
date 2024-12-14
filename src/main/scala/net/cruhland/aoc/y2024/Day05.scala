@@ -54,8 +54,19 @@ object Day05 {
     *
     * @return A permutation of the input update that's correct by the rules.
     */
-  def correctOrder[A](rules: Iterable[(A, A)])(update: Seq[A]): Seq[A] = {
-    update.reverse
+  def correctOrder[A](rules: Iterable[(A, A)])(
+    update: IndexedSeq[A],
+  ): IndexedSeq[A] = {
+    findBrokenRule(rules)(update) match {
+      case Some((beforeIndex, afterIndex)) =>
+        // Swap elements
+        val before = update(beforeIndex)
+        val after = update(afterIndex)
+        val update1 = update.updated(beforeIndex, after)
+        update1.updated(afterIndex, before)
+      case None =>
+        update
+    }
   }
 
   private val EmptyLineRegex = "\n\n".r
@@ -70,17 +81,26 @@ object Day05 {
     *   rules; `false` otherwise.
     */
   def validate[A](rules: Iterable[(A, A)])(update: Seq[A]): Boolean = {
+    findBrokenRule(rules)(update).isEmpty
+  }
+
+  private def findBrokenRule[A](rules: Iterable[(A, A)])(
+    update: Seq[A],
+  ): Option[(Int, Int)] = {
     val indices = update
       .iterator
       .zipWithIndex
       // Only correct when the original collection has no duplicates
       .toMap
 
-    rules.forall { case (x, y) =>
-      val xIndex = indices.getOrElse(x, -1)
-      val yIndex = indices.getOrElse(y, update.size)
-      xIndex < yIndex
-    }
+    rules
+      .iterator
+      .map { case (before, after) =>
+        val beforeIndex = indices.getOrElse(before, -1)
+        val afterIndex = indices.getOrElse(after, update.size)
+        beforeIndex -> afterIndex
+      }
+      .find { case (beforeIndex, afterIndex) => beforeIndex >= afterIndex }
   }
 
 }
