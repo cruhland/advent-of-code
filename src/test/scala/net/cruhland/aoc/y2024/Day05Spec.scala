@@ -218,6 +218,20 @@ class Day05Spec extends AnyFreeSpec with Matchers {
   }
 
   "correctOrder" - {
+    def testCases(
+      testFn: (List[(Char, Char)], List[Char]) => Option[Boolean],
+    ): Unit = {
+      val Examples = List(
+        (List('a' -> 'b'), List('b', 'a')),
+      )
+
+      Examples
+        .iterator
+        .zipWithIndex
+        .foreach { case ((rules, update), i) =>
+          s"example ${i + 1}" in assert(testFn(rules, update))
+        }
+    }
 
     "output is valid" - {
       def testOutputValid[A](
@@ -227,29 +241,19 @@ class Day05Spec extends AnyFreeSpec with Matchers {
         validate(rules, Day05.correctOrder(rules)(update))
       }
 
-      "example 1" in {
-        assert(testOutputValid(
-          rules = List('a' -> 'b'),
-          update = List('b', 'a'),
-        ))
-      }
+      testCases(testOutputValid)
     }
 
     "output is a permutation of the input" - {
       def testOutputPermutation[A](
         rules: List[(A, A)],
         update: List[A],
-      ): Boolean = {
+      ): Option[Boolean] = {
         val correctedUpdate = Day05.correctOrder(rules)(update)
-        haveSameElements(update, correctedUpdate)
+        Some(haveSameElements(update, correctedUpdate))
       }
 
-      "example 1" in {
-        assert(testOutputPermutation(
-          rules = List('x' -> 'y'),
-          update = List('y', 'x'),
-        ))
-      }
+      testCases(testOutputPermutation)
     }
 
   }
