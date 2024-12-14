@@ -138,6 +138,31 @@ class Day05Spec extends AnyFreeSpec with Matchers {
       }
     }
 
+    "ignore rules whose left element is not present" - {
+      def testMissingLeft[A](
+        ruleLeft: A,
+        ruleRight: A,
+        prefix: List[A],
+        suffix: List[A],
+      ): Option[Boolean] = {
+        val reqs = !prefix.contains(ruleLeft) && !suffix.contains(ruleLeft)
+        Option.when(reqs) {
+          val rules = List(ruleLeft -> ruleRight)
+          val update = prefix ++ (ruleRight :: suffix)
+          validate(rules, update)
+        }
+      }
+
+      "example 1" in {
+        assert(testMissingLeft(
+          ruleLeft = '?',
+          ruleRight = 'z',
+          prefix = List('x'),
+          suffix = List('y'),
+        ))
+      }
+    }
+
     "ignore rules whose right element is not present" - {
       def testMissingRight[A](
         ruleLeft: A,
