@@ -18,15 +18,16 @@ class Day05Spec extends AnyFreeSpec with Matchers {
       "example 2" in assert(testNoRules(update = Seq('n', 'm')))
     }
 
-    "one rule, update invalid" - {
+    "update invalid when elements are in the reverse order of a rule" - {
       def testSwap[A](
         a1: A,
         a2: A,
         prefix: List[A],
         middle: List[A],
         suffix: List[A],
+        otherRules: List[(A, A)],
       ): Boolean = {
-        val rules = new OrderingRules(a1 -> a2)
+        val rules = new OrderingRules((a1 -> a2) :: otherRules: _*)
         val update = prefix ++ (a2 :: middle) ++ (a1 :: suffix)
         !rules.validate(update)
       }
@@ -35,21 +36,32 @@ class Day05Spec extends AnyFreeSpec with Matchers {
         val prefix = List()
         val middle = List()
         val suffix = List()
-        assert(testSwap('a', 'b', prefix, middle, suffix))
+        val otherRules = List()
+        assert(testSwap('a', 'b', prefix, middle, suffix, otherRules))
       }
 
       "example 2" in {
         val prefix = List()
         val middle = List()
         val suffix = List()
-        assert(testSwap('x', 'y', prefix, middle, suffix))
+        val otherRules = List()
+        assert(testSwap('x', 'y', prefix, middle, suffix, otherRules))
       }
 
       "example 3" in {
         val prefix = List('r')
         val middle = List('s')
         val suffix = List('t')
-        assert(testSwap('p', 'q', prefix, middle, suffix))
+        val otherRules = List()
+        assert(testSwap('p', 'q', prefix, middle, suffix, otherRules))
+      }
+
+      "example 4" in {
+        val prefix = List('p', 'q')
+        val middle = List()
+        val suffix = List()
+        val otherRules = List('p' -> 'q')
+        assert(testSwap('r', 's', prefix, middle, suffix, otherRules))
       }
     }
 
@@ -79,13 +91,6 @@ class Day05Spec extends AnyFreeSpec with Matchers {
         val suffix = List('h')
         assert(testSame('i', 'j', prefix, middle, suffix))
       }
-    }
-
-    "two rules, update invalid" in {
-      val rules = new OrderingRules('p' -> 'q', 'r' -> 's')
-      val update = Seq('p', 'q', 's', 'r')
-      val result = rules.validate(update)
-      result mustBe false
     }
 
     "one rule, non-adjacent update valid" in {
