@@ -5,18 +5,16 @@ import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 
 class Day05Spec extends AnyFreeSpec with Matchers {
-  import Day05._
-
-  def assert(condOpt: Option[Boolean]): Assertion = {
-    assert(condOpt == Some(true))
-  }
-
-  def hasUniqueElements[A](xs: List[A]): Boolean = xs.distinct.size == xs.size
 
   "OrderingRules.validate" - {
+    def validate[A](rules: List[(A, A)], update: List[A]): Option[Boolean] = {
+      when(hasUniqueElements(update)) {
+        Day05.validate(rules, update)
+      }
+    }
 
     "no rules, update always valid" - {
-      def testNoRules[A](update: List[A]): Boolean = {
+      def testNoRules[A](update: List[A]): Option[Boolean] = {
         validate(rules = List(), update)
       }
 
@@ -35,9 +33,7 @@ class Day05Spec extends AnyFreeSpec with Matchers {
       ): Option[Boolean] = {
         val rules = (a1 -> a2) :: otherRules
         val update = prefix ++ (a2 :: middle) ++ (a1 :: suffix)
-        Option.when(hasUniqueElements(update)) {
-          !validate(rules, update)
-        }
+        validate(rules, update).map(!_)
       }
 
       "example 1" in {
@@ -91,9 +87,7 @@ class Day05Spec extends AnyFreeSpec with Matchers {
       ): Option[Boolean] = {
         val rules = List(a1 -> a2)
         val update = prefix ++ (a1 :: middle) ++ (a2 :: suffix)
-        Option.when(hasUniqueElements(update)) {
-          validate(rules, update)
-        }
+        validate(rules, update)
       }
 
       "example 1" in {
@@ -130,8 +124,8 @@ class Day05Spec extends AnyFreeSpec with Matchers {
         rulesPermuted: List[(A, A)],
       ): Option[Boolean] = {
         val havePermutation = haveSameElements(rules, rulesPermuted)
-        Option.when(validate(rules, update) == result && havePermutation) {
-          validate(rulesPermuted, update) == result
+        whenM(Day05.validate(rules, update) == result && havePermutation) {
+          validate(rulesPermuted, update).map(_ == result)
         }
       }
 
@@ -151,11 +145,9 @@ class Day05Spec extends AnyFreeSpec with Matchers {
         prefix: List[A],
         suffix: List[A],
       ): Option[Boolean] = {
-        val leftNotPresent =
-          !prefix.contains(ruleLeft) && !suffix.contains(ruleLeft)
-        val update = prefix ++ (ruleRight :: suffix)
-        Option.when(leftNotPresent && hasUniqueElements(update)) {
+        whenM(!prefix.contains(ruleLeft) && !suffix.contains(ruleLeft)) {
           val rules = List(ruleLeft -> ruleRight)
+          val update = prefix ++ (ruleRight :: suffix)
           validate(rules, update)
         }
       }
@@ -177,11 +169,9 @@ class Day05Spec extends AnyFreeSpec with Matchers {
         prefix: List[A],
         suffix: List[A],
       ): Option[Boolean] = {
-        val rightNotPresent =
-          !prefix.contains(ruleRight) && !suffix.contains(ruleRight)
-        val update = prefix ++ (ruleLeft :: suffix)
-        Option.when(rightNotPresent && hasUniqueElements(update)) {
+        whenM(!prefix.contains(ruleRight) && !suffix.contains(ruleRight)) {
           val rules = List(ruleLeft -> ruleRight)
+          val update = prefix ++ (ruleLeft :: suffix)
           validate(rules, update)
         }
       }
@@ -197,5 +187,19 @@ class Day05Spec extends AnyFreeSpec with Matchers {
     }
 
   }
+
+  def assert(condOpt: Option[Boolean]): Assertion = {
+    assert(condOpt == Some(true))
+  }
+
+  def when(cond: Boolean)(result: => Boolean): Option[Boolean] = {
+    Option.when(cond)(result)
+  }
+
+  def whenM(cond: Boolean)(result: => Option[Boolean]): Option[Boolean] = {
+    Option.when(cond)(result).flatten
+  }
+
+  def hasUniqueElements[A](xs: List[A]): Boolean = xs.distinct.size == xs.size
 
 }
