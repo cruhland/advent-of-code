@@ -10,7 +10,10 @@ object Day05 {
   }
 
   def validate[A](rules: Iterable[(A, A)], update: Seq[A]): Boolean = {
-    rules.forall { case (x, y) => update.indexOf(x) < update.indexOf(y) }
+    rules.forall { case (x, y) =>
+      val yIndex = update.indexOf(y)
+      yIndex == -1 || update.indexOf(x) < yIndex
+    }
   }
 
 }
