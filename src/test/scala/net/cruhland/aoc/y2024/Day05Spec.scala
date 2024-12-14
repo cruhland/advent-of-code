@@ -107,10 +107,6 @@ class Day05Spec extends AnyFreeSpec with Matchers {
     }
 
     "the order of the rules doesn't matter" - {
-      def haveSameElements[A](xs: List[A], ys: List[A]): Boolean = {
-        xs.diff(ys).isEmpty && ys.diff(xs).isEmpty
-      }
-
       def testRulesPermutation[A](
         rules: List[(A, A)],
         update: List[A],
@@ -239,6 +235,23 @@ class Day05Spec extends AnyFreeSpec with Matchers {
       }
     }
 
+    "output is a permutation of the input" - {
+      def testOutputPermutation[A](
+        rules: List[(A, A)],
+        update: List[A],
+      ): Boolean = {
+        val correctedUpdate = Day05.correctOrder(rules)(update)
+        haveSameElements(update, correctedUpdate)
+      }
+
+      "example 1" in {
+        assert(testOutputPermutation(
+          rules = List('x' -> 'y'),
+          update = List('y', 'x'),
+        ))
+      }
+    }
+
   }
 
   def validate[A](rules: Iterable[(A, A)], update: Seq[A]): Option[Boolean] = {
@@ -260,5 +273,9 @@ class Day05Spec extends AnyFreeSpec with Matchers {
   }
 
   def hasUniqueElements[A](xs: Seq[A]): Boolean = xs.distinct.size == xs.size
+
+  def haveSameElements[A](xs: Seq[A], ys: Seq[A]): Boolean = {
+    xs.diff(ys).isEmpty && ys.diff(xs).isEmpty
+  }
 
 }

@@ -55,7 +55,7 @@ object Day05 {
     * @return A permutation of the input update that's correct by the rules.
     */
   def correctOrder[A](rules: Iterable[(A, A)])(update: Seq[A]): Seq[A] = {
-    Seq.empty
+    update.reverse
   }
 
   private val EmptyLineRegex = "\n\n".r
