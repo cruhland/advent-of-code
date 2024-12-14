@@ -63,6 +63,14 @@ class Day05Spec extends AnyFreeSpec with Matchers {
         val otherRules = List('p' -> 'q')
         assert(testSwap('r', 's', prefix, middle, suffix, otherRules))
       }
+
+      "example 5" in {
+        val prefix = List()
+        val middle = List('z', 'w')
+        val suffix = List()
+        val otherRules = List('z' -> 'w')
+        assert(testSwap('x', 'y', prefix, middle, suffix, otherRules))
+      }
     }
 
     "one rule, update valid" - {
