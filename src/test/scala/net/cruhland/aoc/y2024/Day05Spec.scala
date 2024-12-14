@@ -19,14 +19,38 @@ class Day05Spec extends AnyFreeSpec with Matchers {
     }
 
     "one rule, update invalid" - {
-      def testSwap[A](a1: A, a2: A): Boolean = {
+      def testSwap[A](
+        a1: A,
+        a2: A,
+        prefix: List[A],
+        middle: List[A],
+        suffix: List[A],
+      ): Boolean = {
         val rules = new OrderingRules(a1 -> a2)
-        val update = Seq(a2, a1)
+        val update = prefix ++ (a2 :: middle) ++ (a1 :: suffix)
         !rules.validate(update)
       }
 
-      "example 1" in assert(testSwap('a', 'b'))
-      "example 2" in assert(testSwap('x', 'y'))
+      "example 1" in {
+        val prefix = List()
+        val middle = List()
+        val suffix = List()
+        assert(testSwap('a', 'b', prefix, middle, suffix))
+      }
+
+      "example 2" in {
+        val prefix = List()
+        val middle = List()
+        val suffix = List()
+        assert(testSwap('x', 'y', prefix, middle, suffix))
+      }
+
+      "example 3" in {
+        val prefix = List('r')
+        val middle = List('s')
+        val suffix = List('t')
+        assert(testSwap('p', 'q', prefix, middle, suffix))
+      }
     }
 
     "one rule, update valid" in {
