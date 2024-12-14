@@ -6,10 +6,10 @@ import org.scalatest.matchers.must.Matchers
 
 class Day05Spec extends AnyFreeSpec with Matchers {
 
-  "OrderingRules.validate" - {
+  "validate" - {
     def validate[A](rules: List[(A, A)], update: List[A]): Option[Boolean] = {
       when(hasUniqueElements(update)) {
-        Day05.validate(rules, update)
+        Day05.validate(rules)(update)
       }
     }
 
@@ -124,7 +124,7 @@ class Day05Spec extends AnyFreeSpec with Matchers {
         rulesPermuted: List[(A, A)],
       ): Option[Boolean] = {
         val havePermutation = haveSameElements(rules, rulesPermuted)
-        whenM(Day05.validate(rules, update) == result && havePermutation) {
+        whenM(Day05.validate(rules)(update) == result && havePermutation) {
           validate(rulesPermuted, update).map(_ == result)
         }
       }
@@ -186,6 +186,45 @@ class Day05Spec extends AnyFreeSpec with Matchers {
       }
     }
 
+  }
+
+  "solution1" - {
+
+    "example" in {
+      val input =
+        """47|53
+          |97|13
+          |97|61
+          |97|47
+          |75|29
+          |61|13
+          |75|53
+          |29|13
+          |97|29
+          |53|29
+          |61|53
+          |97|53
+          |61|29
+          |47|13
+          |75|47
+          |97|75
+          |47|61
+          |75|61
+          |47|29
+          |75|13
+          |53|13
+          |
+          |75,47,61,53,29
+          |97,61,53,29,13
+          |75,29,13
+          |75,97,47,61,53
+          |61,13,29
+          |97,13,75,29,47
+          |""".stripMargin
+
+      val answer = Day05.solution1(input)
+      answer mustBe 143
+    }
   }
 
   def assert(condOpt: Option[Boolean]): Assertion = {

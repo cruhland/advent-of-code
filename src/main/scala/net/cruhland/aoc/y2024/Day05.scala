@@ -3,11 +3,39 @@ package net.cruhland.aoc.y2024
 object Day05 {
 
   def solution1(input: String): Int = {
-    // Parse input into data structures (ordering rules, possible updates)
-    // Keep only the updates that are valid according to the rules
+    // Parse input into data structures
+    val Array(rulesInput, updatesInput, _*) = EmptyLineRegex.split(input)
+    val rules = rulesInput
+      .split('\n')
+      .iterator
+      .map { ruleInput =>
+        val Array(left, right) = ruleInput.split('|')
+        left.toInt -> right.toInt
+      }
+      .toList
+    val updates = updatesInput
+      .split('\n')
+      .iterator
+      .map { updateInput =>
+        updateInput
+          .split(',')
+          .iterator
+          .map(_.toInt)
+          .toList
+      }
+      .toList
+
     // Add up the middle page numbers of the valid updates
-    ???
+    updates
+      .filter(validate(rules))
+      .map { update =>
+        val middleIndex = update.size / 2
+        update(middleIndex)
+      }
+      .sum
   }
+
+  private val EmptyLineRegex = "\n\n".r
 
   /** Check that a safety manual update obeys all rules.
     *
@@ -18,7 +46,7 @@ object Day05 {
     *   `true` if all elements of the update are in the order specified by the
     *   rules; `false` otherwise.
     */
-  def validate[A](rules: Iterable[(A, A)], update: Seq[A]): Boolean = {
+  def validate[A](rules: Iterable[(A, A)])(update: Seq[A]): Boolean = {
     val indices = update
       .iterator
       .zipWithIndex
