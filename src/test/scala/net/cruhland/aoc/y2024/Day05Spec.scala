@@ -14,15 +14,19 @@ class Day05Spec extends AnyFreeSpec with Matchers {
         rules.validate(update)
       }
 
-      "example 1" in { testNoRules(update = Seq('a', 'b', 'c')) mustBe true }
-      "example 2" in { testNoRules(update = Seq('n', 'm')) mustBe true }
+      "example 1" in assert(testNoRules(update = Seq('a', 'b', 'c')))
+      "example 2" in assert(testNoRules(update = Seq('n', 'm')))
     }
 
-    "one rule, update invalid" in {
-      val rules = new OrderingRules('a' -> 'b')
-      val update = Seq('b', 'a')
-      val result = rules.validate(update)
-      result mustBe false
+    "one rule, update invalid" - {
+      def testSwap[A](a1: A, a2: A): Boolean = {
+        val rules = new OrderingRules(a1 -> a2)
+        val update = Seq(a2, a1)
+        !rules.validate(update)
+      }
+
+      "example 1" in assert(testSwap('a', 'b'))
+      "example 2" in assert(testSwap('x', 'y'))
     }
 
     "one rule, update valid" in {
