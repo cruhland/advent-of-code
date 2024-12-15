@@ -19,9 +19,11 @@ object Day06 {
   def parse(input: String): StartingState = {
     val width = input.indexOf('\n')
     val height = input.count(_ == '\n') + 1
-    StartingState(width = width, height = height)
+    StartingState(width = width, height = height, obstacles = Nil)
   }
 
-  case class StartingState(width: Int, height: Int)
+  type Position = (Int, Int)
+
+  case class StartingState(width: Int, height: Int, obstacles: List[Position])
 
 }

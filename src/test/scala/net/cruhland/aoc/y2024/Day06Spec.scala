@@ -1,5 +1,6 @@
 package net.cruhland.aoc.y2024
 
+import org.scalatest.Assertion
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 
@@ -7,20 +8,42 @@ class Day06Spec extends AnyFreeSpec with Matchers {
 
   "parse" - {
 
-    "map dimensions" - {
-      def testMapDimensions(width: Int, height: Int): Boolean = {
-        val row = "." * width
-        val input = Iterator
-          .fill(height)(row)
-          .mkString("\n")
+    def testParse(
+      width: Int,
+      height: Int,
+      obstacles: List[Day06.Position],
+    ): Errors = {
+      val row = "." * width
+      val input = Iterator
+        .fill(height)(row)
+        .mkString("\n")
 
-        val startState = Day06.parse(input)
-        startState.width == width && startState.height == height
-      }
+      val startState = Day06.parse(input)
 
-      "small map" in assert(testMapDimensions(width = 4, height = 3))
-      "medium map" in assert(testMapDimensions(width = 17, height = 71))
+      List(
+        Option.unless(startState.width == width)("width"),
+        Option.unless(startState.height == height)("height"),
+        Option.unless(haveSameElements(startState.obstacles, obstacles)) {
+          "obstacles"
+        },
+      ).flatten
     }
+
+    "small blank map" in {
+      assert(testParse(width = 4, height = 3, obstacles = Nil))
+    }
+
+    "medium blank map" in {
+      assert(testParse(width = 17, height = 71, obstacles = Nil))
+    }
+  }
+
+  type Errors = List[String]
+
+  def assert(errors: Errors): Assertion = errors mustBe Nil
+
+  def haveSameElements[A](xs: Seq[A], ys: Seq[A]): Boolean = {
+    xs.diff(ys).isEmpty && ys.diff(xs).isEmpty
   }
 
 }
