@@ -17,10 +17,24 @@ object Day06 {
   }
 
   def parse(input: String): StartingState = {
-    val width = input.indexOf('\n')
-    val height = input.count(_ == '\n') + 1
-    val obstacles = if (input.contains('#')) List((1, 0), (0, 1)) else Nil
-    StartingState(width = width, height = height, obstacles = obstacles)
+    val rows = input.split('\n')
+
+    val obstacles = rows
+      .iterator
+      .zipWithIndex
+      .flatMap { case (row, y) =>
+        row
+          .iterator
+          .zipWithIndex
+          .collect { case ('#', x) => (x, y) }
+      }
+      .toList
+
+    StartingState(
+      width = rows(0).size,
+      height = rows.size,
+      obstacles = obstacles,
+    )
   }
 
   type Position = (Int, Int)
