@@ -13,7 +13,7 @@ class Day06Spec extends AnyFreeSpec with Matchers {
       height: Int,
       obstacles: List[Day06.Position],
     ): Errors = {
-      val row = "." * width
+      val row = (if (obstacles.isEmpty) "." else "#") * width
       val input = Iterator
         .fill(height)(row)
         .mkString("\n")
@@ -35,6 +35,14 @@ class Day06Spec extends AnyFreeSpec with Matchers {
 
     "medium blank map" in {
       assert(testParse(width = 17, height = 71, obstacles = Nil))
+    }
+
+    "tiny map with obstacles" in {
+      assert(testParse(
+        width = 2,
+        height = 2,
+        obstacles = List((0, 1), (1, 0)),
+      ))
     }
   }
 

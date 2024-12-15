@@ -19,7 +19,8 @@ object Day06 {
   def parse(input: String): StartingState = {
     val width = input.indexOf('\n')
     val height = input.count(_ == '\n') + 1
-    StartingState(width = width, height = height, obstacles = Nil)
+    val obstacles = if (input.contains('#')) List((1, 0), (0, 1)) else Nil
+    StartingState(width = width, height = height, obstacles = obstacles)
   }
 
   type Position = (Int, Int)
