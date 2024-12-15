@@ -22,23 +22,28 @@ object Day06 {
     val obstacles = rows
       .iterator
       .zipWithIndex
-      .flatMap { case (row, y) =>
+      .flatMap { case (row, rowIndex) =>
         row
           .iterator
           .zipWithIndex
-          .collect { case ('#', x) => (x, y) }
+          .collect { case ('#', colIndex) => (rowIndex, colIndex) }
       }
       .toList
 
     StartingState(
-      width = rows(0).size,
-      height = rows.size,
+      rowCount = rows.size,
+      colCount = rows(0).size,
       obstacles = obstacles,
     )
   }
 
+  /** Row index, column index */
   type Position = (Int, Int)
 
-  case class StartingState(width: Int, height: Int, obstacles: List[Position])
+  case class StartingState(
+    rowCount: Int,
+    colCount: Int,
+    obstacles: List[Position],
+  )
 
 }
