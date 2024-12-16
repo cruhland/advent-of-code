@@ -30,20 +30,43 @@ object Day06 {
       }
       .toList
 
+    val guardOpt = rows
+      .iterator
+      .zipWithIndex
+      .flatMap { case (row, rowIndex) =>
+        row
+          .iterator
+          .zipWithIndex
+          .collect { case ('^', colIndex) =>
+            Guard(loc = (rowIndex, colIndex), dir = North)
+          }
+      }
+      .nextOption()
+
     StartingState(
       rowCount = rows.size,
       colCount = rows(0).size,
       obstacles = obstacles,
+      guardOpt = guardOpt,
     )
   }
 
   /** Row index, column index */
-  type Position = (Int, Int)
+  type Location = (Int, Int)
+
+  sealed trait Direction
+  case object North extends Direction
+  case object South extends Direction
+  case object East extends Direction
+  case object West extends Direction
+
+  case class Guard(loc: Location, dir: Direction)
 
   case class StartingState(
     rowCount: Int,
     colCount: Int,
-    obstacles: List[Position],
+    obstacles: List[Location],
+    guardOpt: Option[Guard],
   )
 
 }

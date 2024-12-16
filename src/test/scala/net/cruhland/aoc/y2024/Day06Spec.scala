@@ -11,12 +11,27 @@ class Day06Spec extends AnyFreeSpec with Matchers {
     def testParse(
       rowCount: Int,
       colCount: Int,
-      obstacles: Set[Day06.Position],
+      obstacles: Set[Day06.Location],
+      guardOpt: Option[Day06.Guard],
     ): Errors = {
       val input = (0 until rowCount)
         .map { rowIndex =>
           (0 until colCount)
-            .map(colIndex => if (obstacles((rowIndex, colIndex))) '#' else '.')
+            .map { colIndex =>
+              val loc = (rowIndex, colIndex)
+
+              guardOpt match {
+                case Some(guard) if guard.loc == loc =>
+                  guard.dir match {
+                    case Day06.North => '^'
+                    case Day06.South => 'V'
+                    case Day06.East => '>'
+                    case Day06.West => '<'
+                  }
+                case _ =>
+                  if (obstacles(loc)) '#' else '.'
+              }
+            }
             .mkString
         }
         .mkString("\n")
@@ -29,15 +44,26 @@ class Day06Spec extends AnyFreeSpec with Matchers {
         Option.unless(startState.rowCount == rowCount)("rowCount"),
         Option.unless(startState.colCount == colCount)("colCount"),
         Option.unless(obstaclesCorrect)("obstacles"),
+        Option.unless(startState.guardOpt == guardOpt)("guardOpt"),
       ).flatten
     }
 
     "small blank map" in {
-      assert(testParse(rowCount = 3, colCount = 4, obstacles = Set()))
+      assert(testParse(
+        rowCount = 3,
+        colCount = 4,
+        obstacles = Set(),
+        guardOpt = None,
+      ))
     }
 
     "medium blank map" in {
-      assert(testParse(rowCount = 71, colCount = 17, obstacles = Set()))
+      assert(testParse(
+        rowCount = 71,
+        colCount = 17,
+        obstacles = Set(),
+        guardOpt = None,
+      ))
     }
 
     "tiny map with obstacles" in {
@@ -45,6 +71,7 @@ class Day06Spec extends AnyFreeSpec with Matchers {
         rowCount = 2,
         colCount = 2,
         obstacles = Set((0, 1), (1, 0)),
+        guardOpt = None,
       ))
     }
 
@@ -53,6 +80,16 @@ class Day06Spec extends AnyFreeSpec with Matchers {
         rowCount = 3,
         colCount = 5,
         obstacles = Set((0, 2), (1, 0), (1, 4), (2, 1), (2, 3)),
+        guardOpt = None,
+      ))
+    }
+
+    "guard position and direction" in {
+      assert(testParse(
+        rowCount = 3,
+        colCount = 3,
+        obstacles = Set(),
+        guardOpt = Some(Day06.Guard(loc = (1, 1), dir = Day06.North)),
       ))
     }
   }
