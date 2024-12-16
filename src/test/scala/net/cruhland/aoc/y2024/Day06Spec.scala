@@ -84,13 +84,20 @@ class Day06Spec extends AnyFreeSpec with Matchers {
       ))
     }
 
-    "guard position and direction" in {
-      assert(testParse(
-        rowCount = 3,
-        colCount = 3,
-        obstacles = Set(),
-        guardOpt = Some(Day06.Guard(loc = (1, 1), dir = Day06.North)),
-      ))
+    "guard position and direction" - {
+      def testGuard(loc: Day06.Location, dir: Day06.Direction): Errors = {
+        testParse(
+          rowCount = 3,
+          colCount = 3,
+          obstacles = Set(),
+          guardOpt = Some(Day06.Guard(loc, dir)),
+        )
+      }
+
+      "north" in assert(testGuard(loc = (0, 0), dir = Day06.North))
+      "south" in assert(testGuard(loc = (2, 1), dir = Day06.South))
+      "east" in assert(testGuard(loc = (1, 1), dir = Day06.East))
+      "west" in assert(testGuard(loc = (1, 2), dir = Day06.West))
     }
   }
 

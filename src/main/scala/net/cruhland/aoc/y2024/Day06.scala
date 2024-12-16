@@ -19,33 +19,39 @@ object Day06 {
   def parse(input: String): StartingState = {
     val rows = input.split('\n')
 
-    val obstacles = rows
+    val (obstaclesWithLocs, guardsWithLocs) = rows
       .iterator
       .zipWithIndex
       .flatMap { case (row, rowIndex) =>
         row
           .iterator
           .zipWithIndex
-          .collect { case ('#', colIndex) => (rowIndex, colIndex) }
+          .collect {
+            case (c, colIndex) if c != '.' => (c, (rowIndex, colIndex))
+          }
       }
+      .partition { case (c, _) => c == '#' }
+
+    val obstacles = obstaclesWithLocs
+      .map { case (_, loc) => loc }
       .toList
 
-    val guardOpt = rows
-      .iterator
-      .zipWithIndex
-      .flatMap { case (row, rowIndex) =>
-        row
-          .iterator
-          .zipWithIndex
-          .collect { case ('^', colIndex) =>
-            Guard(loc = (rowIndex, colIndex), dir = North)
-          }
+    val guardOpt = guardsWithLocs
+      .map { case (c, loc) =>
+        val dir = c match {
+          case '^' => North
+          case 'V' => South
+          case '>' => East
+          case '<' => West
+        }
+
+        Guard(loc, dir)
       }
       .nextOption()
 
     StartingState(
       rowCount = rows.size,
-      colCount = rows(0).size,
+      colCount = rows.lift(0).fold(0)(_.size),
       obstacles = obstacles,
       guardOpt = guardOpt,
     )
