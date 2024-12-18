@@ -6,6 +6,24 @@ import org.scalatest.matchers.must.Matchers
 
 class Day06Spec extends AnyFreeSpec with Matchers {
 
+  "solution1" - {
+
+    "minimal result - guard leaves area" - {
+
+      "example 1" in {
+        val input =
+          """.^.
+            |...
+            |""".stripMargin
+
+        val answer = Day06.solution1(input)
+        answer mustBe 1
+      }
+
+    }
+
+  }
+
   "parse" - {
 
     def testParse(

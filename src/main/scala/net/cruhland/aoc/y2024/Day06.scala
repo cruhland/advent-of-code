@@ -7,13 +7,15 @@ object Day06 {
     // While the guard has not left the board, step the state forward
     // Count positions visited
 
-    // The state model will need to have the following information:
-    // - Static: Dimensions of the map
-    // - Static: Positions of all obstacles
-    // - Dynamic: Optional position of the guard (None if not on map)
-    // - Dynamic: Direction of the guard
-    // - Dynamic: Which positions have been visited (to provide count)
-    ???
+    // The state model can mostly rely on the grid from the input:
+    // - Blank positions
+    // - Obstacle positions
+    // - Visited positions
+    // But there also needs to be state to track the guard:
+    // - Current location
+    // - Current direction
+
+    1
   }
 
   def parse(input: String): StartingState = {
