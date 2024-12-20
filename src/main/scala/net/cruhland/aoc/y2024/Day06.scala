@@ -15,7 +15,7 @@ object Day06 {
     // - Current location
     // - Current direction
 
-    1
+    input.count(_ == '.') + 1
   }
 
   def parse(input: String): StartingState = {

@@ -11,15 +11,24 @@ class Day06Spec extends AnyFreeSpec with Matchers {
     "minimal result - guard leaves area" - {
 
       "example 1" in {
-        val input =
-          """.^.
-            |...
-            |""".stripMargin
-
+        val input = "^"
         val answer = Day06.solution1(input)
         answer mustBe 1
       }
 
+    }
+
+    "guard moves forward one space" - {
+
+      "example 1" in {
+        val input =
+          """.
+            |^
+            |""".stripMargin
+
+        val answer = Day06.solution1(input)
+        answer mustBe 2
+      }
     }
 
   }
