@@ -15,7 +15,11 @@ object Day06 {
     // - Current location
     // - Current direction
 
-    input.count(_ == '.') + 1
+    val linesUntilGuard = input
+      .view
+      .takeWhile(_ != '^')
+      .count(_ == '\n')
+    linesUntilGuard + 1
   }
 
   def parse(input: String): StartingState = {
