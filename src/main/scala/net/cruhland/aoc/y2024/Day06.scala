@@ -15,11 +15,12 @@ object Day06 {
     // - Current location
     // - Current direction
 
-    val linesUntilGuard = input
-      .view
-      .takeWhile(_ != '^')
-      .count(_ == '\n')
-    linesUntilGuard + 1
+    val oneLine = input.filterNot(_ == '\n')
+    val guardIndex = oneLine.indexWhere(c => c == '^' || c == 'V')
+    val (head, guardWithTail) = oneLine.splitAt(guardIndex)
+    val guard = guardWithTail.head
+    val locsReached = if (guard == '^') head.size else guardWithTail.tail.size
+    locsReached + 1
   }
 
   def parse(input: String): StartingState = {

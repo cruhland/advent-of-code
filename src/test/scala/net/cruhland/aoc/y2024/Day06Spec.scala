@@ -24,10 +24,20 @@ class Day06Spec extends AnyFreeSpec with Matchers {
       answer mustBe 2
     }
 
-    "extra space behind doesn't count" in {
+    "extra space behind doesn't count, going north" in {
       val input =
         """^
           |.
+          |""".stripMargin
+
+      val answer = Day06.solution1(input)
+      answer mustBe 1
+    }
+
+    "extra space behind doesn't count, going south" in {
+      val input =
+        """.
+          |V
           |""".stripMargin
 
       val answer = Day06.solution1(input)
