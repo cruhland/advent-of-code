@@ -163,6 +163,11 @@ class Day06Spec extends AnyFreeSpec with Matchers {
       answer mustBe 1
     }
 
+    "obstacle behind guard does not cause turn" in {
+      val input = "#>."
+      val answer = Day06.solution1(input)
+      answer mustBe 2
+    }
   }
 
   type Errors = List[String]
