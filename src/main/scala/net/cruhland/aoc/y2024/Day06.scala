@@ -18,35 +18,21 @@ object Day06 {
     // - Current direction
 
     val lines = input.lines().toScala(Vector).map(_.toVector)
-    val rowCount = lines.size
-    val colCount = lines.lift(0).fold(0)(_.size)
+    val grid = Grid(lines)
 
     // Find the guard's location and direction
-    val Some(guard) = lines
-      .iterator
-      .zipWithIndex
-      .flatMap { case (line, rowIndex) =>
-        line
-          .iterator
-          .zipWithIndex
-          .collectFirst {
-            case ('^', colIndex) => (north, colIndex)
-            case ('V', colIndex) => (south, colIndex)
-            case ('>', colIndex) => (east, colIndex)
-            case ('<', colIndex) => (west, colIndex)
-          }
-          .map { case (velocity, colIndex) =>
-            Guard(loc = Vec2(rowIndex, colIndex), dir = velocity)
-          }
+    val Some(guard) = grid
+      .collectFirstWithLoc {
+        case '^' => north
+        case 'V' => south
+        case '>' => east
+        case '<' => west
       }
-      .nextOption()
+      .map { case (velocity, loc) => Guard(loc = loc, dir = velocity) }
 
-    val guardNextRowIndex = guard.loc.rowIndex + guard.dir.rowIndex
-    val guardNextColIndex = guard.loc.colIndex + guard.dir.colIndex
-    val guardNextLoc = Vec2(guardNextRowIndex, guardNextColIndex)
-    val blockedByObstacle = lines
-      .lift(guardNextLoc.rowIndex)
-      .flatMap(row => row.lift(guardNextLoc.colIndex))
+    val guardNextLoc = guard.loc + guard.dir
+    val blockedByObstacle = grid
+      .lift(guardNextLoc)
       .exists(_ == '#')
     if (blockedByObstacle) {
       1
@@ -54,9 +40,9 @@ object Day06 {
       // Measure distance of guard from edge of area
       guard.dir match {
         case `north` => guard.loc.rowIndex + 1
-        case `south` => rowCount - guard.loc.rowIndex
+        case `south` => grid.rowCount - guard.loc.rowIndex
         case `west` => guard.loc.colIndex + 1
-        case `east` => colCount - guard.loc.colIndex
+        case `east` => grid.colCount - guard.loc.colIndex
       }
     }
   }
@@ -64,6 +50,14 @@ object Day06 {
   case class Vec2[A] private(val vector: Vector[A]) extends AnyVal {
     def rowIndex: A = vector(0)
     def colIndex: A = vector(1)
+
+    def +(other: Vec2[A])(implicit ev: Numeric[A]): Vec2[A] = {
+      val sums = vector
+        .lazyZip(other.vector)
+        .map(ev.plus)
+
+      new Vec2(sums)
+    }
   }
 
   object Vec2 {
@@ -81,5 +75,37 @@ object Day06 {
   val west: Velocity = Vec2(0, -1)
 
   case class Guard(loc: Location, dir: Velocity)
+
+  case class Grid[A](cells: IndexedSeq[IndexedSeq[A]])
+      extends PartialFunction[Location, A] {
+    val rowCount = cells.size
+    val colCount = cells.lift(0).fold(0)(_.size)
+
+    def apply(loc: Location): A = cells(loc.rowIndex)(loc.colIndex)
+    def isDefinedAt(loc: Location): Boolean = {
+      cells.isDefinedAt(loc.rowIndex) &&
+        cells.lift(0).exists(_.isDefinedAt(loc.colIndex))
+    }
+
+    def collectFirstWithLoc[B](
+      pf: PartialFunction[A, B],
+    ): Option[(B, Location)] = {
+      cells
+        .iterator
+        .zipWithIndex
+        .flatMap { case (line, rowIndex) =>
+          line
+            .iterator
+            .zipWithIndex
+            .collectFirst {
+              case (c, colIndex) if pf.isDefinedAt(c) =>
+                val b = pf(c)
+                val loc = Vec2(rowIndex, colIndex)
+                (b, loc)
+            }
+        }
+        .nextOption()
+    }
+  }
 
 }
