@@ -12,7 +12,7 @@ class Day06Spec extends AnyFreeSpec with Matchers {
       rowCount: Int,
       colCount: Int,
       obstacles: Set[Day06.Location],
-      guardOpt: Option[Day06.Guard],
+      guardOpt: Option[Day06.Guard[Day06.Direction]],
     ): Errors = {
       val input = (0 until rowCount)
         .map { rowIndex =>
@@ -147,6 +147,12 @@ class Day06Spec extends AnyFreeSpec with Matchers {
 
     "extra space behind doesn't count, going west" in {
       val input = "<."
+      val answer = Day06.solution1(input)
+      answer mustBe 1
+    }
+
+    "extra space on the left doesn't count, going north" in {
+      val input = ".^"
       val answer = Day06.solution1(input)
       answer mustBe 1
     }

@@ -1,5 +1,7 @@
 package net.cruhland.aoc.y2024
 
+import scala.jdk.StreamConverters.StreamHasToScala
+
 object Day06 {
 
   def solution1(input: String): Int = {
@@ -15,13 +17,31 @@ object Day06 {
     // - Current location
     // - Current direction
 
-    val oneLine = input.filterNot(_ == '\n')
-    val guardIndex = oneLine
-      .indexWhere(c => c == '^' || c == 'V' || c == '>' || c == '<')
-    val (head, guardWithTail) = oneLine.splitAt(guardIndex)
-    val guard = guardWithTail.head
+    val lines = input.lines().toScala(Vector).map(_.toVector)
+    val Vector(guard) = lines
+      .zipWithIndex
+      .flatMap { case (line, rowIndex) =>
+        line
+          .iterator
+          .zipWithIndex
+          .collectFirst {
+            case (d, colIndex)
+                if d == '^' || d == 'V' || d == '>' || d == '<' =>
+              Guard(loc = (rowIndex, colIndex), dir = d)
+          }
+      }
+
+    val (guardPath, guardPathIndex) =
+      if (guard.dir == '<' || guard.dir == '>') {
+        (lines(guard.rowIndex), guard.colIndex)
+      } else {
+        (lines.map(line => line(guard.colIndex)), guard.rowIndex)
+      }
+    val (head, guardWithTail) = guardPath.splitAt(guardPathIndex)
+    val guardChar = guardWithTail.head
     val locsReached =
-      if (guard == '^' || guard == '<') head.size else guardWithTail.tail.size
+      if (guardChar == '^' || guardChar == '<') head.size
+      else guardWithTail.tail.size
     locsReached + 1
   }
 
@@ -75,13 +95,16 @@ object Day06 {
   case object East extends Direction
   case object West extends Direction
 
-  case class Guard(loc: Location, dir: Direction)
+  case class Guard[+D](loc: Location, dir: D) {
+    def rowIndex: Int = loc._1
+    def colIndex: Int = loc._2
+  }
 
   case class StartingState(
     rowCount: Int,
     colCount: Int,
     obstacles: List[Location],
-    guardOpt: Option[Guard],
+    guardOpt: Option[Guard[Direction]],
   )
 
 }
