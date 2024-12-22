@@ -36,7 +36,7 @@ object Day06 {
             case ('<', colIndex) => (west, colIndex)
           }
           .map { case (velocity, colIndex) =>
-            NewGuard(loc = Vec2(rowIndex, colIndex), dir = velocity)
+            Guard(loc = Vec2(rowIndex, colIndex), dir = velocity)
           }
       }
       .nextOption()
@@ -61,9 +61,6 @@ object Day06 {
     }
   }
 
-  /** Row index, column index */
-  type Location = (Int, Int)
-
   case class Vec2[A] private(val vector: Vector[A]) extends AnyVal {
     def rowIndex: A = vector(0)
     def colIndex: A = vector(1)
@@ -75,7 +72,7 @@ object Day06 {
     }
   }
 
-  type NewLocation = Vec2[Int]
+  type Location = Vec2[Int]
   type Velocity = Vec2[Int]
 
   val north: Velocity = Vec2(-1, 0)
@@ -83,65 +80,6 @@ object Day06 {
   val east: Velocity = Vec2(0, 1)
   val west: Velocity = Vec2(0, -1)
 
-  case class NewGuard(loc: NewLocation, dir: Velocity)
-
-  case class Guard[+D](loc: Location, dir: D) {
-    def rowIndex: Int = loc._1
-    def colIndex: Int = loc._2
-  }
-
-  def parse(input: String): StartingState = {
-    val rows = input.split('\n')
-
-    val (obstaclesWithLocs, guardsWithLocs) = rows
-      .iterator
-      .zipWithIndex
-      .flatMap { case (row, rowIndex) =>
-        row
-          .iterator
-          .zipWithIndex
-          .collect {
-            case (c, colIndex) if c != '.' => (c, (rowIndex, colIndex))
-          }
-      }
-      .partition { case (c, _) => c == '#' }
-
-    val obstacles = obstaclesWithLocs
-      .map { case (_, loc) => loc }
-      .toList
-
-    val guardOpt = guardsWithLocs
-      .map { case (c, loc) =>
-        val dir = c match {
-          case '^' => North
-          case 'V' => South
-          case '>' => East
-          case '<' => West
-        }
-
-        Guard(loc, dir)
-      }
-      .nextOption()
-
-    StartingState(
-      rowCount = rows.size,
-      colCount = rows.lift(0).fold(0)(_.size),
-      obstacles = obstacles,
-      guardOpt = guardOpt,
-    )
-  }
-
-  sealed trait Direction
-  case object North extends Direction
-  case object South extends Direction
-  case object East extends Direction
-  case object West extends Direction
-
-  case class StartingState(
-    rowCount: Int,
-    colCount: Int,
-    obstacles: List[Location],
-    guardOpt: Option[Guard[Direction]],
-  )
+  case class Guard(loc: Location, dir: Velocity)
 
 }
