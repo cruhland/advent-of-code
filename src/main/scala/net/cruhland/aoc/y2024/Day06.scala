@@ -16,10 +16,12 @@ object Day06 {
     // - Current direction
 
     val oneLine = input.filterNot(_ == '\n')
-    val guardIndex = oneLine.indexWhere(c => c == '^' || c == 'V')
+    val guardIndex = oneLine
+      .indexWhere(c => c == '^' || c == 'V' || c == '>' || c == '<')
     val (head, guardWithTail) = oneLine.splitAt(guardIndex)
     val guard = guardWithTail.head
-    val locsReached = if (guard == '^') head.size else guardWithTail.tail.size
+    val locsReached =
+      if (guard == '^' || guard == '<') head.size else guardWithTail.tail.size
     locsReached + 1
   }
 
