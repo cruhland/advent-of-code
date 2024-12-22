@@ -37,12 +37,17 @@ object Day06 {
       }
       .nextOption()
 
-    // Measure distance of guard from edge of area
-    guard.dir match {
-      case '^' => guard.rowIndex + 1
-      case 'V' => rowCount - guard.rowIndex
-      case '<' => guard.colIndex + 1
-      case '>' => colCount - guard.colIndex
+    val hasObstacle = lines.exists(_.contains('#'))
+    if (hasObstacle) {
+      1
+    } else {
+      // Measure distance of guard from edge of area
+      guard.dir match {
+        case '^' => guard.rowIndex + 1
+        case 'V' => rowCount - guard.rowIndex
+        case '<' => guard.colIndex + 1
+        case '>' => colCount - guard.colIndex
+      }
     }
   }
 
