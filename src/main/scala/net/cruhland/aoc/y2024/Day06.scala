@@ -18,7 +18,12 @@ object Day06 {
     // - Current direction
 
     val lines = input.lines().toScala(Vector).map(_.toVector)
-    val Vector(guard) = lines
+    val rowCount = lines.size
+    val colCount = lines.lift(0).fold(0)(_.size)
+
+    // Find the guard's location and direction
+    val Some(guard) = lines
+      .iterator
       .zipWithIndex
       .flatMap { case (line, rowIndex) =>
         line
@@ -30,19 +35,15 @@ object Day06 {
               Guard(loc = (rowIndex, colIndex), dir = d)
           }
       }
+      .nextOption()
 
-    val (guardPath, guardPathIndex) =
-      if (guard.dir == '<' || guard.dir == '>') {
-        (lines(guard.rowIndex), guard.colIndex)
-      } else {
-        (lines.map(line => line(guard.colIndex)), guard.rowIndex)
-      }
-    val (head, guardWithTail) = guardPath.splitAt(guardPathIndex)
-    val guardChar = guardWithTail.head
-    val locsReached =
-      if (guardChar == '^' || guardChar == '<') head.size
-      else guardWithTail.tail.size
-    locsReached + 1
+    // Measure distance of guard from edge of area
+    guard.dir match {
+      case '^' => guard.rowIndex + 1
+      case 'V' => rowCount - guard.rowIndex
+      case '<' => guard.colIndex + 1
+      case '>' => colCount - guard.colIndex
+    }
   }
 
   def parse(input: String): StartingState = {
