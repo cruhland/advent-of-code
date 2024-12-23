@@ -89,6 +89,16 @@ class Day06Spec extends AnyFreeSpec with Matchers {
       val answer = Day06.solution1(input)
       answer mustBe 2
     }
+
+    "count visited cells, not steps" in {
+      val input =
+        """>.#
+          |.#.
+          |""".stripMargin
+
+      val answer = Day06.solution1(input)
+      answer mustBe 2
+    }
   }
 
 }
