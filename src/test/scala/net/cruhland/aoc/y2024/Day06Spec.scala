@@ -99,6 +99,24 @@ class Day06Spec extends AnyFreeSpec with Matchers {
       val answer = Day06.solution1(input)
       answer mustBe 2
     }
+
+    "example" in {
+      val input =
+        """....#.....
+          |.........#
+          |..........
+          |..#.......
+          |.......#..
+          |..........
+          |.#..^.....
+          |........#.
+          |#.........
+          |......#...
+          |""".stripMargin
+
+      val answer = Day06.solution1(input)
+      answer mustBe 41
+    }
   }
 
 }
