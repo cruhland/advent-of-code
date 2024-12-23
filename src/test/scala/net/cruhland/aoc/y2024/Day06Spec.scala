@@ -73,6 +73,16 @@ class Day06Spec extends AnyFreeSpec with Matchers {
       val answer = Day06.solution1(input)
       answer mustBe 2
     }
+
+    "guard continues after turn" in {
+      val input =
+        """>#
+          |..
+          |""".stripMargin
+
+      val answer = Day06.solution1(input)
+      answer mustBe 2
+    }
   }
 
 }

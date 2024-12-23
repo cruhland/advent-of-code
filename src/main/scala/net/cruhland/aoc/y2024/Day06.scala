@@ -30,20 +30,22 @@ object Day06 {
       }
       .map { case (velocity, loc) => Guard(loc = loc, dir = velocity) }
 
+    // Turn guard if blocked by obstacle
     val guardNextLoc = guard.loc + guard.dir
     val blockedByObstacle = grid
       .lift(guardNextLoc)
       .exists(_ == '#')
-    if (blockedByObstacle) {
-      1
-    } else {
-      // Measure distance of guard from edge of area
-      guard.dir match {
-        case `north` => guard.loc.rowIndex + 1
-        case `south` => grid.rowCount - guard.loc.rowIndex
-        case `west` => guard.loc.colIndex + 1
-        case `east` => grid.colCount - guard.loc.colIndex
-      }
+
+    val unblockedGuard = if (blockedByObstacle) {
+      guard.copy(dir = rotateRight(guard.dir))
+    } else guard
+
+    // Measure distance of guard from edge of area
+    unblockedGuard.dir match {
+      case `north` => unblockedGuard.loc.rowIndex + 1
+      case `south` => grid.rowCount - unblockedGuard.loc.rowIndex
+      case `west` => unblockedGuard.loc.colIndex + 1
+      case `east` => grid.colCount - unblockedGuard.loc.colIndex
     }
   }
 
@@ -69,10 +71,12 @@ object Day06 {
   type Location = Vec2[Int]
   type Velocity = Vec2[Int]
 
+  def rotateRight(v: Velocity): Velocity = Vec2(v.colIndex, -v.rowIndex)
+
   val north: Velocity = Vec2(-1, 0)
-  val south: Velocity = Vec2(1, 0)
-  val east: Velocity = Vec2(0, 1)
-  val west: Velocity = Vec2(0, -1)
+  val east: Velocity = rotateRight(north)
+  val south: Velocity = rotateRight(east)
+  val west: Velocity = rotateRight(south)
 
   case class Guard(loc: Location, dir: Velocity)
 
