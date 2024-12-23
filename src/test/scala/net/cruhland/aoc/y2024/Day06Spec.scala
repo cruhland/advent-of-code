@@ -83,6 +83,12 @@ class Day06Spec extends AnyFreeSpec with Matchers {
       val answer = Day06.solution1(input)
       answer mustBe 2
     }
+
+    "distance before obstacle is included in result" in {
+      val input = ">.#"
+      val answer = Day06.solution1(input)
+      answer mustBe 2
+    }
   }
 
 }

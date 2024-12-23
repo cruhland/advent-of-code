@@ -21,7 +21,7 @@ object Day06 {
     val grid = Grid(lines)
 
     // Find the guard's location and direction
-    val Some(guard) = grid
+    val initialGuardOpt = grid
       .collectFirstWithLoc {
         case '^' => north
         case 'V' => south
@@ -30,23 +30,31 @@ object Day06 {
       }
       .map { case (velocity, loc) => Guard(loc = loc, dir = velocity) }
 
-    // Turn guard if blocked by obstacle
-    val guardNextLoc = guard.loc + guard.dir
-    val blockedByObstacle = grid
-      .lift(guardNextLoc)
-      .exists(_ == '#')
+    // Step the guard forward until they leave the area
+    val Some((_, visitedCount)) = Iterator
+      .iterate((initialGuardOpt, 1)) {
+        case (None, visitedCount) =>
+          (None, visitedCount)
+        case (Some(guard), visitedCount) =>
+          // Look one step ahead
+          val nextLoc = guard.loc + guard.dir
+          val nextCell = grid.lift(nextLoc)
+          nextCell match {
+            case None =>
+              // Leave area
+              (None, visitedCount)
+            case Some('#') =>
+              // Turn guard if blocked by obstacle
+              (Some(guard.copy(dir = rotateRight(guard.dir))), visitedCount)
+            case Some(_) =>
+              // Take step
+              (Some(guard.copy(loc = nextLoc)), visitedCount + 1)
+          }
+      }
+      .dropWhile { case (guardOpt, _) => guardOpt.isDefined }
+      .nextOption()
 
-    val unblockedGuard = if (blockedByObstacle) {
-      guard.copy(dir = rotateRight(guard.dir))
-    } else guard
-
-    // Measure distance of guard from edge of area
-    unblockedGuard.dir match {
-      case `north` => unblockedGuard.loc.rowIndex + 1
-      case `south` => grid.rowCount - unblockedGuard.loc.rowIndex
-      case `west` => unblockedGuard.loc.colIndex + 1
-      case `east` => grid.colCount - unblockedGuard.loc.colIndex
-    }
+    visitedCount
   }
 
   case class Vec2[A] private(val vector: Vector[A]) extends AnyVal {
